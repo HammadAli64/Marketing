@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased dark:bg-helix-bg dark:text-slate-100;
+}
+
+::selection {
+  @apply bg-brand/25 text-slate-900 dark:bg-brand/35 dark:text-white;
+}
+
+.focus-ring {
+  @apply outline-none ring-2 ring-brand/45 ring-offset-2 ring-offset-white dark:ring-offset-helix-bg;
+}
