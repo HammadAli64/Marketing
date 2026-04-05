@@ -1,6 +1,44 @@
 from django.db import models
 
 
+class SocialLink(models.Model):
+    """Footer / site-wide social profile URLs (managed in admin)."""
+
+    class Platform(models.TextChoices):
+        LINKEDIN = "linkedin", "LinkedIn"
+        X = "x", "X (Twitter)"
+        FACEBOOK = "facebook", "Facebook"
+        GITHUB = "github", "GitHub"
+        INSTAGRAM = "instagram", "Instagram"
+        WHATSAPP = "whatsapp", "WhatsApp"
+        YOUTUBE = "youtube", "YouTube"
+        TIKTOK = "tiktok", "TikTok"
+        WEBSITE = "website", "Website / other"
+
+    platform = models.CharField(
+        max_length=20,
+        choices=Platform.choices,
+        db_index=True,
+        help_text="Used to pick the icon in the footer.",
+    )
+    url = models.URLField(max_length=500)
+    label = models.CharField(
+        max_length=80,
+        blank=True,
+        help_text="Accessibility name (defaults to the platform name if empty).",
+    )
+    is_active = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "Social link"
+        verbose_name_plural = "Social links"
+
+    def __str__(self):
+        return f"{self.get_platform_display()} → {self.url[:48]}"
+
+
 class HeroSettings(models.Model):
     """Single record — home hero (headline, background image, CTAs)."""
 

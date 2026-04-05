@@ -28,9 +28,9 @@ export function GlassPillarsSection({ pillars }: Props) {
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid gap-4 sm:grid-cols-3">
-          {pillars.map((item) => (
+          {pillars.map((item, i) => (
             <div
-              key={item.title}
+              key={`${item.title}-${i}`}
               className="rounded-2xl border border-white/25 bg-white/15 p-6 shadow-lg shadow-black/20 backdrop-blur-md"
             >
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand">

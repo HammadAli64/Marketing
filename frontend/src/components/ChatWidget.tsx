@@ -39,7 +39,7 @@ export function ChatWidget() {
       <div className="fixed bottom-5 right-5 z-[60] flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
         {panel ? (
           <div className="w-[min(100vw-2rem,320px)] rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-helix-border dark:bg-helix-elevated dark:shadow-black/40">
-              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+              <p className="text-sm font-semibold text-helix-heading dark:text-white">
                 Start a conversation
               </p>
               <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">

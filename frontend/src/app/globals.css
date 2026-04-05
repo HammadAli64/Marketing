@@ -19,7 +19,7 @@ body {
 }
 
 ::selection {
-  @apply bg-brand/25 text-slate-900 dark:bg-brand/35 dark:text-white;
+  @apply bg-brand/25 text-helix-heading dark:bg-brand/35 dark:text-white;
 }
 
 .focus-ring {

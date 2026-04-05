@@ -36,6 +36,14 @@ const unsplashPattern = {
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  /**
+   * Avoids dev-only errors: "SegmentViewNode ... not in the React Client Manifest" and
+   * `__webpack_modules__[moduleId] is not a function` when webpack HMR + next-devtools race
+   * (common with `webpack.cache = false` on Windows). Re-enable if you need the segment tree UI.
+   */
+  experimental: {
+    devtoolSegmentExplorer: false,
+  },
   /** Calmer terminal + browser in dev (compile still prints on error). */
   devIndicators: false,
   logging: {
@@ -46,16 +54,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [mediaRemotePattern(), unsplashPattern],
   },
   /**
-   * Persistent webpack filesystem cache under `.next/cache/webpack` often corrupts on Windows
-   * (cloud sync, antivirus, or deleting `.next` while `next dev` is running). Disabling it in
-   * dev avoids ENOENT pack.gz / missing middleware-manifest cascades. Production `next build`
-   * is unchanged.
+   * Webpack dev only (default `npm run dev`). Disables persistent cache on Windows so `.next`
+   * does not end up half-written (ENOENT manifests / *.tmp build files) when HMR races or AV locks files.
    */
   webpack: (config, { dev }) => {
     if (dev) {
       config.cache = false;
       config.infrastructureLogging = { level: "error" };
-      config.stats = "errors-warnings";
     }
     return config;
   },

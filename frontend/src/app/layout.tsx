@@ -3,6 +3,7 @@ import { DM_Sans, Syne } from "next/font/google";
 import { ClientShell } from "@/components/ClientShell";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { fetchFooterSocialLinks } from "@/lib/cms";
 import { COMPANY } from "@/lib/constants";
 import "./globals.css";
 
@@ -48,11 +49,13 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const socialLinks = await fetchFooterSocialLinks();
+
   return (
     <html
       lang="en"
@@ -63,7 +66,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
         <ThemeProvider>
           <ClientShell>{children}</ClientShell>
-          <Footer />
+          <Footer socialLinks={socialLinks} />
         </ThemeProvider>
       </body>
     </html>

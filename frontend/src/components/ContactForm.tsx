@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { submitContact } from "@/lib/api";
-import { SERVICES } from "@/lib/constants";
-
 type ServiceOption = { title: string; slug?: string };
 
 const initial = {
@@ -24,9 +22,7 @@ type ContactFormProps = {
 
 export function ContactForm({ serviceOptions }: ContactFormProps) {
   const options: ServiceOption[] =
-    serviceOptions && serviceOptions.length > 0
-      ? serviceOptions
-      : SERVICES.map((s) => ({ title: s.title, slug: s.slug }));
+    serviceOptions && serviceOptions.length > 0 ? serviceOptions : [];
   const [form, setForm] = useState(initial);
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [errMsg, setErrMsg] = useState("");
@@ -109,19 +105,30 @@ export function ContactForm({ serviceOptions }: ContactFormProps) {
       </div>
       <label className="block text-base">
         <span className={labelMuted}>Service interest</span>
-        <select
-          name="service"
-          value={form.service}
-          onChange={(e) => setForm((f) => ({ ...f, service: e.target.value }))}
-          className={fieldClass}
-        >
-          <option value="">Select…</option>
-          {options.map((s) => (
-            <option key={s.slug || s.title} value={s.title}>
-              {s.title}
-            </option>
-          ))}
-        </select>
+        {options.length > 0 ? (
+          <select
+            name="service"
+            value={form.service}
+            onChange={(e) => setForm((f) => ({ ...f, service: e.target.value }))}
+            className={fieldClass}
+          >
+            <option value="">Select…</option>
+            {options.map((s) => (
+              <option key={s.slug || s.title} value={s.title}>
+                {s.title}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            name="service"
+            value={form.service}
+            onChange={(e) => setForm((f) => ({ ...f, service: e.target.value }))}
+            className={fieldClass}
+            placeholder="e.g. Website redesign, SEO, app build"
+            autoComplete="off"
+          />
+        )}
       </label>
       <label className="block text-base">
         <span className={labelMuted}>Project details *</span>

@@ -20,9 +20,15 @@ export default {
           bg: "#0A1128",
           surface: "#0f1629",
           elevated: "#141d35",
+          /** Light-mode headings: deep blue-slate (not near-black slate-900). */
+          heading: "#1a3557",
           border: "rgba(148, 163, 184, 0.12)",
           muted: "#94a3b8",
           gold: "#D4AF37",
+          /** Muted gold for section labels (e.g. staff augmentation eyebrow). */
+          goldMuted: "#C5B358",
+          /** Deep navy for high-contrast body on white cards. */
+          deepNavy: "#001F3F",
         },
       },
       fontFamily: {

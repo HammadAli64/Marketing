@@ -34,7 +34,7 @@ function TestimonialCard({ t }: { t: CmsTestimonial }) {
         &ldquo;{t.quote}&rdquo;
       </p>
       <footer className="mt-5 border-t border-slate-100 pt-4 dark:border-white/10">
-        <p className="font-display text-base font-semibold text-slate-900 dark:text-white">
+        <p className="font-display text-base font-semibold text-helix-heading dark:text-white">
           {t.client_name}
         </p>
         {t.role_title ? (
@@ -47,21 +47,11 @@ function TestimonialCard({ t }: { t: CmsTestimonial }) {
   );
 }
 
-function MarqueeRow({
-  items,
-  reverse,
-}: {
-  items: CmsTestimonial[];
-  reverse?: boolean;
-}) {
+function MarqueeRow({ items }: { items: CmsTestimonial[] }) {
   const doubled = [...items, ...items];
   return (
     <div className="group/marquee relative overflow-hidden py-2">
-      <div
-        className={`flex w-max gap-4 ${
-          reverse ? "animate-marquee-rev" : "animate-marquee"
-        } motion-reduce:animate-none group-hover/marquee:[animation-play-state:paused]`}
-      >
+      <div className="flex w-max gap-4 animate-marquee motion-reduce:animate-none group-hover/marquee:[animation-play-state:paused]">
         {doubled.map((t, i) => (
           <TestimonialCard key={`${t.id}-${i}`} t={t} />
         ))}
@@ -81,11 +71,9 @@ export function TestimonialsSection({
   items,
   eyebrow = "Testimonials",
   title = "Don’t Take Our Word For It",
-  subtitle = "Real clients. Real outcomes. Hover to pause the carousel.",
+  subtitle = "Real clients. Real outcomes — one row, infinite scroll. Hover to pause.",
 }: TestimonialsSectionProps) {
   if (items.length === 0) return null;
-
-  const secondRow = [...items].reverse();
 
   return (
     <CursorGlowTrack
@@ -96,7 +84,7 @@ export function TestimonialsSection({
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
           {eyebrow}
         </p>
-        <h2 className="mt-3 font-display text-3xl font-bold text-slate-900 dark:text-white sm:text-5xl">
+        <h2 className="mt-3 font-display text-3xl font-bold text-helix-heading dark:text-white sm:text-5xl">
           {title}
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg">
@@ -104,9 +92,8 @@ export function TestimonialsSection({
         </p>
       </div>
 
-      <div className="mt-10 flex flex-col gap-2 sm:gap-3">
+      <div className="mt-10">
         <MarqueeRow items={items} />
-        {items.length > 1 ? <MarqueeRow items={secondRow} reverse /> : null}
       </div>
     </CursorGlowTrack>
   );

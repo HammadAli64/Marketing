@@ -84,7 +84,7 @@ export default async function AboutPage() {
                 About {COMPANY.replace(" Solutions", "")}
               </span>
               <h1 className="mt-6 font-display text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[3.25rem] lg:leading-[1.06]">
-                {about.hero_title}
+                {about.hero_title.trim() || "About us"}
               </h1>
               {about.hero_subtitle ? (
                 <p
@@ -195,7 +195,7 @@ export default async function AboutPage() {
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
                 How we work
               </p>
-              <h2 className="mt-4 font-display text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">
+              <h2 className="mt-4 font-display text-3xl font-bold text-helix-heading dark:text-white sm:text-4xl">
                 How we earn trust
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
@@ -218,7 +218,7 @@ export default async function AboutPage() {
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>
-                      <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-white">
+                      <h3 className="font-display text-lg font-semibold text-helix-heading dark:text-white">
                         {item.title}
                       </h3>
                       <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
@@ -241,7 +241,7 @@ export default async function AboutPage() {
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
                 Gallery
               </p>
-              <h2 className="mt-4 font-display text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">
+              <h2 className="mt-4 font-display text-3xl font-bold text-helix-heading dark:text-white sm:text-4xl">
                 Inside our practice
               </h2>
               <p className="mt-3 max-w-xl text-sm text-slate-500 dark:text-slate-400">

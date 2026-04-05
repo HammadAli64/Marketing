@@ -14,4 +14,5 @@ urlpatterns = [
     path("blogs/slugs/", views.blog_slugs, name="cms_blog_slugs"),
     path("blogs/<slug:slug>/", views.blog_detail, name="cms_blog_detail"),
     path("blogs/", views.blogs_list, name="cms_blogs"),
+    path("social/", views.social_links, name="cms_social"),
 ]

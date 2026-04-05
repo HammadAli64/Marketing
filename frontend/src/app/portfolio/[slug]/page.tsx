@@ -91,7 +91,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
         {p.gallery.length > 0 ? (
           <Reveal className="mt-14" delay={0.08}>
-            <h2 className="font-display text-xl font-semibold text-slate-900 dark:text-white">
+            <h2 className="font-display text-xl font-semibold text-helix-heading dark:text-white">
               Gallery
             </h2>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">

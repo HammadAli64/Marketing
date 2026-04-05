@@ -1,6 +1,3 @@
-import { PORTFOLIO_ITEMS, SERVICES } from "@/lib/constants";
-import { unsplashForSeed } from "@/lib/placeholders";
-
 /** Slim shapes for client nav — matches `CmsService` / `CmsProjectCard` from `cms.ts`. */
 export type NavShellService = {
   title: string;
@@ -19,33 +16,11 @@ export type NavShellProject = {
   cover_image: string | null;
 };
 
+/** No static demo items — nav lists come from the CMS API only. */
 export function navFallbackServices(): NavShellService[] {
-  return SERVICES.map((s) => ({
-    title: s.title,
-    slug: s.slug,
-    summary: s.summary,
-    bullets: [...s.bullets],
-    icon_image: null,
-    cover_image: unsplashForSeed(s.slug),
-  }));
-}
-
-function slugify(title: string) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+  return [];
 }
 
 export function navFallbackProjects(): NavShellProject[] {
-  return PORTFOLIO_ITEMS.map((p) => {
-    const slug = slugify(p.title);
-    return {
-      title: p.title,
-      slug,
-      category: p.category,
-      excerpt: p.description,
-      cover_image: unsplashForSeed(slug),
-    };
-  });
+  return [];
 }

@@ -12,8 +12,6 @@ import {
   type NavShellProject,
   type NavShellService,
 } from "@/lib/navFallbacks";
-import { unsplashForSeed } from "@/lib/placeholders";
-
 function apiBase(): string {
   return (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(
     /\/$/,
@@ -39,12 +37,8 @@ async function fetchNavJson(url: string): Promise<unknown | null> {
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [services, setServices] = useState<NavShellService[]>(() =>
-    navFallbackServices()
-  );
-  const [projects, setProjects] = useState<NavShellProject[]>(() =>
-    navFallbackProjects()
-  );
+  const [services, setServices] = useState<NavShellService[]>([]);
+  const [projects, setProjects] = useState<NavShellProject[]>([]);
   const [mobileSvc, setMobileSvc] = useState(false);
   const [mobilePf, setMobilePf] = useState(false);
 
@@ -58,22 +52,12 @@ export function Navbar() {
         const svc = svcRaw as { services?: NavShellService[] } | null;
         const pf = pfRaw as { projects?: NavShellProject[] } | null;
         if (svc?.services?.length) {
-          setServices(
-            svc.services.map((s: NavShellService) => ({
-              ...s,
-              cover_image: s.cover_image || unsplashForSeed(s.slug),
-            }))
-          );
+          setServices(svc.services as NavShellService[]);
         } else {
           setServices(navFallbackServices());
         }
         if (pf?.projects?.length) {
-          setProjects(
-            pf.projects.map((p: NavShellProject) => ({
-              ...p,
-              cover_image: p.cover_image || unsplashForSeed(p.slug),
-            }))
-          );
+          setProjects(pf.projects as NavShellProject[]);
         } else {
           setProjects(navFallbackProjects());
         }
@@ -97,7 +81,7 @@ export function Navbar() {
         className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
           active
             ? "bg-brand/10 text-brand dark:bg-white/10 dark:text-white"
-            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
+            : "text-slate-600 hover:bg-slate-100 hover:text-helix-heading dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
         }`}
       >
         {label}
@@ -118,7 +102,7 @@ export function Navbar() {
               className="object-contain p-0.5"
             />
           </span>
-          <span className="truncate font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
+          <span className="truncate font-display text-lg font-semibold tracking-tight text-helix-heading dark:text-white">
             {COMPANY.replace(" Solutions", "")}
             <span className="text-slate-500 dark:text-slate-500"> Solutions</span>
           </span>
@@ -133,7 +117,7 @@ export function Navbar() {
             className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
               pathname.startsWith("/blogs")
                 ? "bg-brand/10 text-brand dark:bg-white/10 dark:text-white"
-                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
+                : "text-slate-600 hover:bg-slate-100 hover:text-helix-heading dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
             }`}
           >
             Blog
@@ -150,7 +134,7 @@ export function Navbar() {
               <Link
                 href="/services"
                 prefetch={false}
-                className="px-2 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                className="px-2 py-2 text-sm font-medium text-slate-700 hover:text-helix-heading dark:text-slate-300 dark:hover:text-white"
               >
                 Services
               </Link>
@@ -192,7 +176,7 @@ export function Navbar() {
               <Link
                 href="/portfolio"
                 prefetch={false}
-                className="px-2 py-2 text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                className="px-2 py-2 text-sm font-medium text-slate-700 hover:text-helix-heading dark:text-slate-300 dark:hover:text-white"
               >
                 Portfolio
               </Link>

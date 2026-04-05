@@ -12,6 +12,7 @@ from .models import (
     HomeTestimonial,
     Project,
     Service,
+    SocialLink,
 )
 
 
@@ -233,3 +234,16 @@ def blog_slugs(request):
         BlogPost.objects.filter(is_published=True).values_list("slug", flat=True)
     )
     return JsonResponse({"slugs": slugs})
+
+
+@require_GET
+def social_links(request):
+    items = [
+        {
+            "id": s.platform,
+            "label": (s.label or "").strip() or s.get_platform_display(),
+            "href": s.url,
+        }
+        for s in SocialLink.objects.filter(is_active=True)
+    ]
+    return JsonResponse({"social": items})

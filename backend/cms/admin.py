@@ -13,6 +13,7 @@ from .models import (
     Project,
     ProjectGalleryImage,
     Service,
+    SocialLink,
 )
 
 
@@ -98,6 +99,15 @@ class BlogPostAdmin(admin.ModelAdmin):
     ordering = ("order", "-published_at", "-id")
     prepopulated_fields = {"slug": ("title",)}
     search_fields = ("title", "description", "body")
+
+
+@admin.register(SocialLink)
+class SocialLinkAdmin(admin.ModelAdmin):
+    list_display = ("platform", "url", "is_active", "order")
+    list_filter = ("is_active", "platform")
+    list_editable = ("order", "is_active")
+    ordering = ("order", "id")
+    search_fields = ("url", "label")
 
 
 @admin.register(Project)

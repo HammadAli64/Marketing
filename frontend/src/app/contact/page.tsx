@@ -22,7 +22,7 @@ export default async function ContactPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
               Contact
             </p>
-            <h1 className="mt-3 font-display text-4xl font-bold text-slate-900 dark:text-white sm:text-5xl md:text-6xl">
+            <h1 className="mt-3 font-display text-4xl font-bold text-helix-heading dark:text-white sm:text-5xl md:text-6xl">
               Let&apos;s plan your next release
             </h1>
             <p className="mt-6 text-xl leading-relaxed text-slate-600 dark:text-slate-400 sm:text-2xl">
@@ -58,7 +58,7 @@ export default async function ContactPage() {
 
         <Reveal delay={0.06}>
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-helix-border dark:bg-helix-elevated sm:p-8">
-            <h2 className="font-display text-2xl font-semibold text-slate-900 dark:text-white sm:text-3xl">
+            <h2 className="font-display text-2xl font-semibold text-helix-heading dark:text-white sm:text-3xl">
               Inquiry form
             </h2>
             <p className="mt-3 text-base text-slate-600 dark:text-slate-400 sm:text-lg">

@@ -42,7 +42,9 @@ export function BlogsListingClient({ posts }: Props) {
       <div className="mx-auto mt-14 max-w-6xl px-4 sm:px-6">
         {filtered.length === 0 ? (
           <p className="text-center text-lg text-slate-600 dark:text-slate-400">
-            No articles match that title. Try another search.
+            {posts.length === 0
+              ? "No blog posts in the CMS yet. Add them in Django admin."
+              : "No articles match that title. Try another search."}
           </p>
         ) : (
           <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -68,24 +70,12 @@ export function BlogsListingClient({ posts }: Props) {
                     )}
                   </div>
                   <div className="flex flex-1 flex-col p-6">
-                    <h2 className="font-display text-lg font-semibold leading-snug text-slate-900 group-hover:text-brand dark:text-white dark:group-hover:text-brand">
+                    <h2 className="font-display text-lg font-semibold leading-snug text-helix-heading group-hover:text-brand dark:text-white dark:group-hover:text-brand">
                       {post.title}
                     </h2>
-                    <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                    <p className="mt-3 line-clamp-4 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                       {post.description}
                     </p>
-                    {post.bullets.length > 0 ? (
-                      <ul className="mt-4 space-y-1 text-xs text-slate-600 dark:text-slate-400">
-                        {post.bullets.slice(0, 3).map((b) => (
-                          <li key={b} className="flex gap-2">
-                            <span className="text-brand" aria-hidden>
-                              •
-                            </span>
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
                     <span className="mt-4 text-sm font-semibold text-brand">Read more →</span>
                   </div>
                 </Link>

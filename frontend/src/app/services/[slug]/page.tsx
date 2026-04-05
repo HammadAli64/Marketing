@@ -73,7 +73,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           </Link>
           <h1
             className={`mt-6 font-display text-4xl font-bold sm:text-5xl ${
-              heroPhoto ? "text-white" : "text-slate-900 dark:text-white"
+              heroPhoto ? "text-white" : "text-helix-heading dark:text-white"
             }`}
           >
             {s.title}
@@ -99,12 +99,12 @@ export default async function ServiceDetailPage({ params }: Props) {
 
         {s.bullets.length > 0 ? (
           <Reveal className="mt-12" delay={0.06}>
-            <h2 className="font-display text-lg font-semibold text-slate-900 dark:text-white">
+            <h2 className="font-display text-lg font-semibold text-helix-heading dark:text-white">
               What you get
             </h2>
             <ul className="mt-4 space-y-3 text-sm text-slate-700 dark:text-slate-300">
-              {s.bullets.map((b) => (
-                <li key={b} className="flex gap-2">
+              {s.bullets.map((b, i) => (
+                <li key={i} className="flex gap-2">
                   <span className="text-brand">✓</span>
                   {b}
                 </li>

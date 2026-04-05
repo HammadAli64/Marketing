@@ -21,7 +21,7 @@ export function BlogPreviewSection({ posts }: Props) {
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
             Insights
           </p>
-          <h2 className="mt-4 font-display text-3xl font-bold text-slate-900 dark:text-white sm:text-5xl">
+          <h2 className="mt-4 font-display text-3xl font-bold text-helix-heading dark:text-white sm:text-5xl">
             Growth Weapons for Ambitious Founders
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
@@ -51,22 +51,12 @@ export function BlogPreviewSection({ posts }: Props) {
                     )}
                   </div>
                   <div className="flex flex-1 flex-col p-6 sm:p-8">
-                    <h3 className="font-display text-lg font-semibold leading-snug text-slate-900 group-hover:text-brand dark:text-white dark:group-hover:text-brand">
+                    <h3 className="font-display text-lg font-semibold leading-snug text-helix-heading group-hover:text-brand dark:text-white dark:group-hover:text-brand">
                       {post.title}
                     </h3>
-                    <p className="mt-3 flex-1 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+                    <p className="mt-3 line-clamp-4 flex-1 text-base leading-relaxed text-slate-600 dark:text-slate-400">
                       {post.description}
                     </p>
-                    {post.bullets.length > 0 ? (
-                      <ul className="mt-4 space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
-                        {post.bullets.slice(0, 3).map((b) => (
-                          <li key={b} className="flex gap-2">
-                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-brand" aria-hidden />
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
                     <span className="mt-6 inline-flex text-sm font-semibold text-brand group-hover:text-brand-hover">
                       Read article →
                     </span>

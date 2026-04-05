@@ -4,13 +4,13 @@ import { useEffect, useState, type RefObject } from "react";
 
 type Options = {
   once?: boolean;
-  /** 0–1: fire when this fraction of the element is visible (default 0.2). */
+  /** 0–1: fraction of the element that must be visible (default 0.2). Use 0 for any intersection. */
   amount?: number;
   rootMargin?: string;
 };
 
 /**
- * Lightweight IntersectionObserver helper (replaces framer-motion useInView for stats/sections).
+ * IntersectionObserver helper. Uses a single threshold (no brittle ratio edge cases).
  */
 export function useInView(
   ref: RefObject<Element | null>,
@@ -23,29 +23,22 @@ export function useInView(
     if (!el) return;
 
     const thr = Math.min(1, Math.max(0, amount));
-    const thresholds =
-      thr <= 0
-        ? [0]
-        : thr >= 1
-          ? [1]
-          : [0, thr - 0.001, thr, Math.min(1, thr + 0.001), 1];
+    const threshold = thr <= 0 ? 0 : thr;
 
     const obs = new IntersectionObserver(
       (entries) => {
         const e = entries[0];
         if (!e) return;
-        const hit =
-          thr <= 0
-            ? e.isIntersecting
-            : e.isIntersecting && e.intersectionRatio >= thr - 0.001;
-        if (hit) {
-          setInView(true);
-          if (once) obs.disconnect();
+        if (e.isIntersecting) {
+          if (thr <= 0 || e.intersectionRatio >= thr) {
+            setInView(true);
+            if (once) obs.disconnect();
+          }
         } else if (!once) {
           setInView(false);
         }
       },
-      { root: null, rootMargin, threshold: thresholds }
+      { root: null, rootMargin, threshold }
     );
 
     obs.observe(el);

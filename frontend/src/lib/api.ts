@@ -13,11 +13,21 @@ export type ContactPayload = {
 export async function submitContact(
   payload: ContactPayload
 ): Promise<{ ok: boolean; error?: string }> {
-  const res = await fetch(`${API_BASE}/api/contact/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  const ctrl = new AbortController();
+  const t = window.setTimeout(() => ctrl.abort(), 20000);
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}/api/contact/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: ctrl.signal,
+    });
+  } catch {
+    return { ok: false, error: "Network error or timeout. Try again." };
+  } finally {
+    window.clearTimeout(t);
+  }
 
   let data: { ok?: boolean; error?: string } = {};
   try {

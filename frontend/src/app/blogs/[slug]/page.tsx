@@ -104,7 +104,7 @@ export default async function BlogArticlePage({ params }: Props) {
           )}
           <h1
             className={`mt-3 font-display text-3xl font-bold leading-tight sm:text-4xl md:text-5xl ${
-              post.cover_image ? "text-white drop-shadow-sm" : "text-slate-900 dark:text-white"
+              post.cover_image ? "text-white drop-shadow-sm" : "text-helix-heading dark:text-white"
             }`}
           >
             {post.title}
@@ -124,12 +124,12 @@ export default async function BlogArticlePage({ params }: Props) {
       <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20">
         {post.bullets.length > 0 ? (
           <Reveal>
-            <h2 className="font-display text-xl font-semibold text-slate-900 dark:text-white">
+            <h2 className="font-display text-xl font-semibold text-helix-heading dark:text-white">
               Key takeaways
             </h2>
             <ul className="mt-4 space-y-2 text-slate-600 dark:text-slate-400">
-              {post.bullets.map((b) => (
-                <li key={b} className="flex gap-3">
+              {post.bullets.map((b, i) => (
+                <li key={i} className="flex gap-3">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden />
                   <span>{b}</span>
                 </li>
@@ -149,7 +149,7 @@ export default async function BlogArticlePage({ params }: Props) {
         </div>
 
         <Reveal delay={0.08} className="mt-14 rounded-2xl border border-slate-200 bg-slate-50 p-8 dark:border-helix-border dark:bg-helix-elevated">
-          <p className="font-display text-lg font-semibold text-slate-900 dark:text-white">
+          <p className="font-display text-lg font-semibold text-helix-heading dark:text-white">
             Want this executed for your business?
           </p>
           <p className="mt-2 text-slate-600 dark:text-slate-400">
