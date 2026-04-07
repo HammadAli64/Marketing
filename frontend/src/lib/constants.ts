@@ -1,7 +1,20 @@
 export const COMPANY = "Helix Prime Solutions";
 
 export const CONTACT_EMAIL =
-  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@helixprimesolutions.com";
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@helixprimesolutions.com";
+
+/** General inquiries — shown next to `CONTACT_EMAIL` when different. */
+export const INFO_EMAIL =
+  process.env.NEXT_PUBLIC_INFO_EMAIL?.trim() || "info@helixprimesolutions.com";
+
+/** Distinct public inboxes for mailto links (deduped). */
+export function publicContactEmails(): readonly string[] {
+  const a = CONTACT_EMAIL.trim();
+  const b = INFO_EMAIL.trim();
+  if (!b) return [a];
+  if (a.toLowerCase() === b.toLowerCase()) return [a];
+  return [a, b];
+}
 
 type SocialId =
   | "linkedin"

@@ -61,6 +61,10 @@ const nextConfig: NextConfig = {
     if (dev) {
       config.cache = false;
       config.infrastructureLogging = { level: "error" };
+      // Reduces ChunkLoadError on slow disks / Windows AV when layout.js is slow to serve.
+      if (config.output && typeof config.output === "object") {
+        (config.output as { chunkLoadTimeout?: number }).chunkLoadTimeout = 120_000;
+      }
     }
     return config;
   },

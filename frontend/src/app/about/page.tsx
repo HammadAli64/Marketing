@@ -3,9 +3,7 @@ import Link from "next/link";
 import { CmsImage } from "@/components/CmsImage";
 import { Reveal } from "@/components/Reveal";
 import { COMPANY } from "@/lib/constants";
-import { fetchAbout } from "@/lib/cms";
-
-export const revalidate = 60;
+import { STATIC_ABOUT } from "@/lib/siteContent";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -37,8 +35,8 @@ const HIGHLIGHTS = [
   { label: "Retention", value: "Partnership" },
 ] as const;
 
-export default async function AboutPage() {
-  const about = await fetchAbout();
+export default function AboutPage() {
+  const about = STATIC_ABOUT;
   const hasHeroImg = Boolean(about.hero_background_image);
 
   return (
@@ -245,8 +243,8 @@ export default async function AboutPage() {
                 Inside our practice
               </h2>
               <p className="mt-3 max-w-xl text-sm text-slate-500 dark:text-slate-400">
-                Images are managed in Admin → About → gallery. Swap anytime without redeploying
-                code.
+                To show a gallery here, add image URLs to <code className="text-slate-400">STATIC_ABOUT.images</code> in{" "}
+                <code className="text-slate-400">siteContent.ts</code> or wire a small API later.
               </p>
             </Reveal>
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

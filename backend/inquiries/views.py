@@ -73,15 +73,16 @@ def contact_submit(request):
                 [recipient],
                 fail_silently=False,
             )
-        except Exception:
+        except Exception as exc:
             logger.exception("Failed to send inquiry email")
-            return JsonResponse(
-                {
-                    "ok": False,
-                    "error": "We could not send your message. Please try again or email us directly.",
-                },
-                status=500,
-            )
+            err_payload = {
+                "ok": False,
+                "error": "We could not send your message. Please try again or email us directly.",
+            }
+            # Helps debug Gmail app password, TLS/SSL, and .env loading (only when DEBUG).
+            if settings.DEBUG:
+                err_payload["smtp_error"] = str(exc)[:800]
+            return JsonResponse(err_payload, status=500)
     else:
         logger.warning(
             "EMAIL_HOST_USER/PASSWORD not set — inquiry saved but no email sent."

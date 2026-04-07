@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { COMPANY, CONTACT_EMAIL } from "@/lib/constants";
-import type { FooterSocialLink, SocialPlatform } from "@/lib/cms";
+import { COMPANY, publicContactEmails } from "@/lib/constants";
+import type { FooterSocialLink, SocialPlatform } from "@/lib/footerSocial";
 
 function SocialIcon({ id, paintKey }: { id: SocialPlatform; paintKey: number }) {
   const className = "h-5 w-5";
@@ -153,11 +153,15 @@ export function Footer({ socialLinks }: FooterProps) {
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
             Contact
           </p>
-          <p className="mt-4 text-sm text-slate-300">
-            <a href={`mailto:${CONTACT_EMAIL}`} className="transition hover:text-brand">
-              {CONTACT_EMAIL}
-            </a>
-          </p>
+          <ul className="mt-4 space-y-2 text-sm text-slate-300">
+            {publicContactEmails().map((email) => (
+              <li key={email}>
+                <a href={`mailto:${email}`} className="transition hover:text-brand">
+                  {email}
+                </a>
+              </li>
+            ))}
+          </ul>
           <p className="mt-2 text-xs text-slate-500">
             Response within one business day for qualified inquiries.
           </p>
@@ -184,7 +188,8 @@ export function Footer({ socialLinks }: FooterProps) {
             </ul>
           ) : (
             <p className="mt-4 text-xs text-slate-500">
-              Add links in Django admin → Social links.
+              Set <code className="text-slate-400">NEXT_PUBLIC_SOCIAL_*</code> URLs in{" "}
+              <code className="text-slate-400">.env.local</code>.
             </p>
           )}
         </div>

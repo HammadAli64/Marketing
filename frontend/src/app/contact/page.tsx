@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
 import { Reveal } from "@/components/Reveal";
-import { COMPANY, CONTACT_EMAIL } from "@/lib/constants";
+import { COMPANY, publicContactEmails } from "@/lib/constants";
 import { fetchServicesList } from "@/lib/cms";
 
 export const revalidate = 60;
@@ -36,12 +36,18 @@ export default async function ContactPage() {
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Email
               </p>
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="mt-2 block text-lg font-medium text-brand hover:text-brand-hover dark:hover:text-brand"
-              >
-                {CONTACT_EMAIL}
-              </a>
+              <ul className="mt-3 space-y-2">
+                {publicContactEmails().map((email) => (
+                  <li key={email}>
+                    <a
+                      href={`mailto:${email}`}
+                      className="block break-all text-lg font-medium text-brand hover:text-brand-hover dark:hover:text-brand"
+                    >
+                      {email}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-helix-border dark:bg-helix-surface/70">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">

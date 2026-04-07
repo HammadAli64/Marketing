@@ -1,6 +1,6 @@
 # Marketing
 
-Helix Prime Solutions marketing site: **Django CMS** backend and **Next.js 15** (App Router) frontend. Content (home hero, stats, showcases, services, portfolio, blog, about, social links) is managed in Django Admin and consumed by the frontend over a JSON API.
+Helix Prime Solutions marketing site: **Django** backend and **Next.js 15** (App Router) frontend. Most marketing copy lives in the frontend (`frontend/src/lib/siteContent.ts`); **services**, **portfolio projects**, and **blog posts** are loaded from Django Admin via `/api/cms/`.
 
 **Repository:** [github.com/HammadAli64/Marketing](https://github.com/HammadAli64/Marketing)
 
@@ -86,17 +86,19 @@ npm run dev
 
 ## CMS content checklist
 
-Add and publish in **Django Admin** (CMS section):
+**Django Admin** (CMS section) is used for:
 
-- **Home — Hero**, **Pillar cards** (API only; not shown on the public home layout), **Stats**, **Showcase blocks**, **Testimonials**
-- **Services**, **Projects**, **Blog posts**, **About**
-- **Social links** (footer; optional env fallbacks in `frontend/.env.local`)
+- **Services** (home grid, `/services`, contact form dropdown)
+- **Projects** (home portfolio strip, `/portfolio`)
+- **Blog posts** (home preview, `/blogs`)
 
-The home page renders stats and showcase blocks from these models (plus hero, services grid, etc.).
+**Frontend-only** (edit `frontend/src/lib/siteContent.ts` and redeploy): home hero, impact stats, showcase blocks, testimonials, about page story/mission, and most section copy. **Footer social icons** use `NEXT_PUBLIC_SOCIAL_*` in `frontend/.env.local` (see `constants.ts`).
 
 ### Wrong or “missing” text on the site
 
-The frontend shows **exactly what is in your Django database** for hero, stats, and blog posts. If you see odd placeholders, open **Admin** and edit **CMS → Home — Hero**, **Home — Impact stats**, and **Blog posts**, or reset marketing copy:
+Most public copy is in **`frontend/src/lib/siteContent.ts`** (redeploy after edits). For **services / projects / blogs**, confirm `NEXT_PUBLIC_API_URL` points at your Django server and check Django Admin.
+
+Backend **`content_defaults.py`** still fills the **JSON API** when tables are empty (useful for API-only consumers or `seed_cms`). To reset DB marketing rows:
 
 ```bash
 cd backend

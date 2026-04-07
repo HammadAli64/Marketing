@@ -2,11 +2,13 @@ import logging
 import os
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Always load backend/.env regardless of the shell's current working directory.
+load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY", "dev-only-change-in-production-not-for-production-use"
@@ -19,6 +21,9 @@ ALLOWED_HOSTS = [
     for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
     if h.strip()
 ]
+# Railway default hostname pattern (*.up.railway.app) when deploying there.
+if os.environ.get("RAILWAY_ENVIRONMENT") and ".up.railway.app" not in " ".join(ALLOWED_HOSTS):
+    ALLOWED_HOSTS.append(".up.railway.app")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -34,6 +39,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -62,11 +68,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "helix_backend.wsgi.application"
 
+# Railway / Postgres: set DATABASE_URL (recommended). Falls back to SQLite for local dev.
+_sqlite_url = f"sqlite:///{(BASE_DIR / 'db.sqlite3').as_posix()}"
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=_sqlite_url,
+        conn_max_age=600,
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -82,10 +90,35 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media"
+_media_root_env = os.environ.get("DJANGO_MEDIA_ROOT", "").strip()
+MEDIA_ROOT = Path(_media_root_env) if _media_root_env else (BASE_DIR / "media")
+
+# Behind Railway / reverse proxies (HTTPS).
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "true").lower() in (
+        "1",
+        "true",
+        "yes",
+    )
+
+_csrf_origins = os.environ.get("CSRF_TRUSTED_ORIGINS", "").strip()
+if _csrf_origins:
+    CSRF_TRUSTED_ORIGINS = [
+        o.strip() for o in _csrf_origins.split(",") if o.strip()
+    ]
 
 # CORS — Next.js dev server and production
 _cors = os.environ.get(
@@ -97,19 +130,29 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Gmail SMTP (use App Password: https://support.google.com/accounts/answer/185833)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com").strip()
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() in ("1", "true", "yes")
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
-DEFAULT_FROM_EMAIL = os.environ.get(
-    "DEFAULT_FROM_EMAIL",
-    EMAIL_HOST_USER or "noreply@helixprimesolutions.com",
+# Implicit TLS (e.g. port 465). If true, leave EMAIL_USE_TLS false in .env for typical Gmail 465 setups.
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "false").lower() in ("1", "true", "yes")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "").strip()
+# Google App Passwords are 16 characters; the UI shows four groups with spaces—remove spaces.
+EMAIL_HOST_PASSWORD = (
+    os.environ.get("EMAIL_HOST_PASSWORD", "").strip().replace(" ", "")
+)
+# Avoid hanging on blocked SMTP (seconds; set 0 to use library default).
+_email_timeout = os.environ.get("EMAIL_TIMEOUT", "30").strip()
+EMAIL_TIMEOUT = int(_email_timeout) if _email_timeout.isdigit() else 30
+DEFAULT_FROM_EMAIL = (
+    os.environ.get("DEFAULT_FROM_EMAIL", "").strip()
+    or EMAIL_HOST_USER
+    or "noreply@helixprimesolutions.com"
 )
 
-CONTACT_RECIPIENT_EMAIL = os.environ.get(
-    "CONTACT_RECIPIENT_EMAIL",
-    EMAIL_HOST_USER or "hello@helixprimesolutions.com",
+CONTACT_RECIPIENT_EMAIL = (
+    os.environ.get("CONTACT_RECIPIENT_EMAIL", "").strip()
+    or EMAIL_HOST_USER
+    or "info@helixprimesolutions.com"
 )
 
 # Quiet runserver: hide routine "GET … 200" lines. Set DJANGO_VERBOSE_HTTP=1 to see every request.
@@ -186,6 +229,11 @@ LOGGING = {
         "django.server": {
             "handlers": ["django.server"],
             "level": _DJANGO_SERVER_LOG_LEVEL,
+            "propagate": False,
+        },
+        "inquiries": {
+            "handlers": ["console"],
+            "level": "INFO",
             "propagate": False,
         },
     },

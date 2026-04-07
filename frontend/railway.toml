@@ -1,0 +1,9 @@
+# Used when this service’s Root Directory is set to `frontend` in Railway.
+# https://docs.railway.com/reference/config-as-code
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm ci && npm run build"
+
+[deploy]
+startCommand = "npm start"

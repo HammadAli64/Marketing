@@ -182,7 +182,11 @@ export function ImpactStatsSection({ stats }: Props) {
                 Numbers That Actually Matter
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-                These figures are whatever you save under CMS → Home — Impact stats in Django Admin.
+                Snapshot metrics we stand behind—edit the values in{" "}
+                <code className="rounded bg-slate-200/80 px-1.5 py-0.5 text-sm dark:bg-white/10">
+                  siteContent.ts
+                </code>{" "}
+                if you need different numbers.
               </p>
             </div>
           </div>

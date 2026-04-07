@@ -10,19 +10,29 @@ import { Reveal } from "@/components/Reveal";
 import { StaffAugmentationSection } from "@/components/StaffAugmentationSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { WhyChooseSection } from "@/components/WhyChooseSection";
-import { COMPANY, CONTACT_EMAIL, SERVICE_SLUG_ORDER } from "@/lib/constants";
-import { fetchAbout, fetchBlogsList, fetchHomeBundle, fetchProjectsList } from "@/lib/cms";
+import { COMPANY, publicContactEmails, SERVICE_SLUG_ORDER } from "@/lib/constants";
+import { fetchBlogsList, fetchProjectsList, fetchServicesList } from "@/lib/cms";
+import {
+  STATIC_ABOUT,
+  STATIC_HERO,
+  STATIC_HOME_STATS,
+  STATIC_SHOWCASES,
+  STATIC_TESTIMONIALS,
+} from "@/lib/siteContent";
 
-export const revalidate = 60;
+/** Home still loads services, projects, and blogs from Django; other sections are static. */
+export const revalidate = 120;
 
 export default async function HomePage() {
-  const [home, projects, blogPosts, aboutCms] = await Promise.all([
-    fetchHomeBundle(),
+  const [services, projects, blogPosts] = await Promise.all([
+    fetchServicesList(),
     fetchProjectsList(),
     fetchBlogsList(),
-    fetchAbout(),
   ]);
-  const { services, testimonials, hero, stats, showcases } = home;
+  const hero = STATIC_HERO;
+  const stats = STATIC_HOME_STATS;
+  const showcases = STATIC_SHOWCASES;
+  const testimonials = STATIC_TESTIMONIALS;
   const featured = projects.slice(0, 3);
   const envHero = process.env.NEXT_PUBLIC_HERO_BACKGROUND?.trim();
   const heroBackground =
@@ -129,7 +139,7 @@ export default async function HomePage() {
               Digital Weapons Built to Win
             </h2>
             <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600 dark:text-slate-400 sm:text-xl">
-              Explore what we offer—content and imagery are managed in the CMS.
+              Explore what we offer—cards and detail pages are loaded from Django admin.
             </p>
           </Reveal>
           {orderedServices.length > 0 ? (
@@ -190,7 +200,7 @@ export default async function HomePage() {
                   Proof. Not Promises.
                 </h2>
                 <p className="mt-3 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400 sm:text-xl">
-                  Selected work from the CMS—add projects in admin to populate this section.
+                  Selected work from your portfolio—add projects in Django admin to populate this section.
                 </p>
               </div>
               <Link
@@ -247,7 +257,7 @@ export default async function HomePage() {
 
       <BlogPreviewSection posts={blogPosts} />
 
-      <AboutHomeSection intro={aboutCms.intro} />
+      <AboutHomeSection intro={STATIC_ABOUT.intro} />
 
       <FinalCtaSection />
 
@@ -287,12 +297,18 @@ export default async function HomePage() {
                 <p className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Email
                 </p>
-                <a
-                  href={`mailto:${CONTACT_EMAIL}`}
-                  className="mt-3 block break-all text-xl font-medium text-brand hover:text-brand-hover"
-                >
-                  {CONTACT_EMAIL}
-                </a>
+                <ul className="mt-3 space-y-2">
+                  {publicContactEmails().map((email) => (
+                    <li key={email}>
+                      <a
+                        href={`mailto:${email}`}
+                        className="block break-all text-xl font-medium text-brand hover:text-brand-hover"
+                      >
+                        {email}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
                 <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   We typically respond within one business day for qualified inquiries. For
                   urgent staff-augmentation requests, mention your stack and start date in the

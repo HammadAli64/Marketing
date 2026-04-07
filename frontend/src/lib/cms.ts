@@ -1,4 +1,3 @@
-import { SOCIAL_LINKS } from "@/lib/constants";
 import { navFallbackProjects, navFallbackServices } from "@/lib/navFallbacks";
 
 export function getServerApiBase(): string {
@@ -60,7 +59,6 @@ export type CmsHero = {
   cta_secondary_link: string;
 };
 
-export type CmsPillar = { title: string; body: string };
 export type CmsShowcase = {
   title: string;
   body: string;
@@ -135,82 +133,12 @@ export type CmsBlogPostDetail = CmsBlogPostCard & {
   published_at: string | null;
 };
 
-export type HomeBundle = {
-  hero: CmsHero;
-  pillars: CmsPillar[];
-  showcases: CmsShowcase[];
-  stats: CmsStat[];
-  services: CmsService[];
-  testimonials: CmsTestimonial[];
-};
-
-type HomePayloadRaw = {
-  hero: CmsHero | null;
-  pillars: CmsPillar[];
-  showcases: CmsShowcase[];
-  stats: CmsStat[];
-  services: CmsService[];
-  testimonials?: CmsTestimonial[];
-};
-
-const defaultHero = (): CmsHero => ({
-  eyebrow: "",
-  headline: "",
-  subheadline: "",
-  background_image: null,
-  cta_primary_label: "Contact",
-  cta_primary_link: "/contact",
-  cta_secondary_label: "",
-  cta_secondary_link: "/services",
-});
-
 function servicesFromConstants(): CmsService[] {
   return navFallbackServices();
 }
 
 function normalizeServices(list: CmsService[]): CmsService[] {
   return list.map((s) => ({ ...s }));
-}
-
-function mergeHome(data: Partial<HomePayloadRaw> | null): HomeBundle {
-  const heroBase =
-    data?.hero && data.hero.headline?.trim() ? data.hero : defaultHero();
-  const hero: CmsHero = {
-    ...heroBase,
-    background_image: heroBase.background_image?.trim() || null,
-  };
-  const pillars = data?.pillars && data.pillars.length > 0 ? data.pillars : [];
-  const servicesRaw =
-    data?.services && data.services.length > 0
-      ? data.services
-      : servicesFromConstants();
-  const services = normalizeServices(servicesRaw);
-  const showcases = (data?.showcases ?? []).map((s) => ({ ...s }));
-  const rawT = data?.testimonials;
-  const testimonialsRaw = Array.isArray(rawT) ? rawT : [];
-  const testimonials = testimonialsRaw.map((t) => ({
-    ...t,
-    stars: Math.min(5, Math.max(1, Math.round(Number(t.stars) || 5))),
-  }));
-  return {
-    hero,
-    pillars,
-    showcases,
-    stats: data?.stats ?? [],
-    services,
-    testimonials,
-  };
-}
-
-export async function fetchHomeBundle(): Promise<HomeBundle> {
-  try {
-    const res = await cmsFetch(`${getServerApiBase()}/api/cms/home/`);
-    if (!res.ok) throw new Error(String(res.status));
-    const raw = (await res.json()) as HomePayloadRaw;
-    return mergeHome(raw);
-  } catch {
-    return mergeHome(null);
-  }
 }
 
 export async function fetchServicesList(): Promise<CmsService[]> {
@@ -277,7 +205,7 @@ export async function fetchServiceSlugs(): Promise<string[]> {
   } catch {
     /* fallback */
   }
-  return [];
+  return navFallbackServices().map((s) => s.slug);
 }
 
 function fallbackProjects(): CmsProjectCard[] {
@@ -344,33 +272,6 @@ export async function fetchProjectSlugs(): Promise<string[]> {
     /* use fallback */
   }
   return fallbackProjects().map((p) => p.slug);
-}
-
-const defaultAbout = (): CmsAbout => ({
-  hero_title: "",
-  hero_subtitle: "",
-  hero_background_image: null,
-  intro: "",
-  mission_title: "",
-  mission_body: "",
-  images: [],
-});
-
-export async function fetchAbout(): Promise<CmsAbout> {
-  try {
-    const res = await cmsFetch(`${getServerApiBase()}/api/cms/about/`);
-    if (!res.ok) throw new Error(String(res.status));
-    const j = (await res.json()) as { about: CmsAbout | null };
-    if (j.about) {
-      return {
-        ...j.about,
-        hero_background_image: j.about.hero_background_image,
-      };
-    }
-    return defaultAbout();
-  } catch {
-    return defaultAbout();
-  }
 }
 
 function normalizeBlogCard(p: CmsBlogPostCard): CmsBlogPostCard {
@@ -445,71 +346,4 @@ export async function fetchBlogDetail(
   }
 
   return null;
-}
-
-/** Platforms with SVG icons in `Footer`. Unknown API values map to `website`. */
-export type SocialPlatform =
-  | "linkedin"
-  | "x"
-  | "facebook"
-  | "github"
-  | "instagram"
-  | "whatsapp"
-  | "youtube"
-  | "tiktok"
-  | "website";
-
-export type FooterSocialLink = {
-  id: SocialPlatform;
-  label: string;
-  href: string;
-};
-
-const SOCIAL_PLATFORMS = new Set<string>([
-  "linkedin",
-  "x",
-  "facebook",
-  "github",
-  "instagram",
-  "whatsapp",
-  "youtube",
-  "tiktok",
-  "website",
-]);
-
-function envFallbackFooterSocial(): FooterSocialLink[] {
-  return SOCIAL_LINKS.map((s) => ({
-    id: s.id as SocialPlatform,
-    label: s.label,
-    href: s.href,
-  }));
-}
-
-/**
- * Active social links from Django admin (`CMS → Social links`).
- * Falls back to `NEXT_PUBLIC_SOCIAL_*` env URLs from `constants` if the API is empty or down.
- */
-export async function fetchFooterSocialLinks(): Promise<FooterSocialLink[]> {
-  const base = getServerApiBase();
-  try {
-    const res = await cmsFetch(`${base}/api/cms/social/`);
-    if (!res.ok) return envFallbackFooterSocial();
-    const json = (await res.json()) as {
-      social?: { id: string; label: string; href: string }[];
-    };
-    const raw = json.social ?? [];
-    const out: FooterSocialLink[] = [];
-    for (const row of raw) {
-      const href = (row.href ?? "").trim();
-      if (!href || !/^https?:\/\//i.test(href)) continue;
-      const idRaw = (row.id ?? "").trim();
-      const id = (SOCIAL_PLATFORMS.has(idRaw) ? idRaw : "website") as SocialPlatform;
-      const label = (row.label ?? "").trim() || id;
-      out.push({ id, label, href });
-    }
-    if (out.length > 0) return out;
-  } catch {
-    /* timeout / network */
-  }
-  return envFallbackFooterSocial();
 }

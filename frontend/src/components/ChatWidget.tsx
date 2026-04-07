@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CONTACT_EMAIL } from "@/lib/constants";
+import { publicContactEmails } from "@/lib/constants";
 
 function TawkScript() {
   const pid = process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID;
@@ -46,12 +46,19 @@ export function ChatWidget() {
                 Tell us about your project—we reply within one business day.
               </p>
               <div className="mt-4 flex flex-col gap-2">
-                <a
-                  href={`mailto:${CONTACT_EMAIL}?subject=Project%20inquiry`}
-                  className="rounded-xl bg-brand px-4 py-3 text-center text-sm font-semibold text-white hover:bg-brand-hover"
-                >
-                  Email us
-                </a>
+                {publicContactEmails().map((email, idx) => (
+                  <a
+                    key={email}
+                    href={`mailto:${email}?subject=Project%20inquiry`}
+                    className={
+                      idx === 0
+                        ? "rounded-xl bg-brand px-4 py-3 text-center text-sm font-semibold text-white hover:bg-brand-hover"
+                        : "rounded-xl border border-slate-200 px-4 py-2.5 text-center text-xs font-medium break-all text-slate-700 hover:bg-slate-50 dark:border-helix-border dark:text-slate-200 dark:hover:bg-white/5"
+                    }
+                  >
+                    {email}
+                  </a>
+                ))}
                 <a
                   href="/contact"
                   className="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-medium text-slate-800 hover:bg-slate-50 dark:border-helix-border dark:text-slate-200 dark:hover:bg-white/5"

@@ -29,7 +29,7 @@ export async function submitContact(
     window.clearTimeout(t);
   }
 
-  let data: { ok?: boolean; error?: string } = {};
+  let data: { ok?: boolean; error?: string; smtp_error?: string } = {};
   try {
     data = await res.json();
   } catch {
@@ -37,7 +37,12 @@ export async function submitContact(
   }
 
   if (!res.ok) {
-    return { ok: false, error: data.error || "Something went wrong." };
+    const base = data.error || "Something went wrong.";
+    const detail =
+      data.smtp_error && process.env.NODE_ENV === "development"
+        ? ` ${data.smtp_error}`
+        : "";
+    return { ok: false, error: `${base}${detail}` };
   }
   if (!data.ok) {
     return { ok: false, error: data.error || "Request failed." };

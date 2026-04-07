@@ -36,8 +36,9 @@ export function HomeShowcasesSection({ showcases }: Props) {
                     sizes="(max-width:1024px) 100vw, 50vw"
                   />
                 ) : (
-                  <div className="flex h-full min-h-[200px] items-center justify-center px-4 text-center text-sm text-slate-500 dark:text-slate-400">
-                    Add an image in Admin → Home — Showcase blocks
+                  <div className="flex h-full min-h-[200px] items-center justify-center bg-gradient-to-br from-brand/15 via-slate-100 to-helix-gold/10 px-4 text-center text-sm text-slate-500 dark:from-brand/10 dark:via-helix-elevated dark:to-helix-gold/10 dark:text-slate-400">
+                    Set <code className="text-xs">image</code> on this block in{" "}
+                    <code className="text-xs">siteContent.ts</code>
                   </div>
                 )}
               </div>
