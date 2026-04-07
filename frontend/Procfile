@@ -1,1 +1,1 @@
-web: npm start
+web: sh -c 'exec next start -H 0.0.0.0 -p ${PORT:-8080}'

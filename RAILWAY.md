@@ -71,6 +71,8 @@ Optional: social links, Tawk, etc. — see `frontend/.env.example`.
 
 **Frontend build fails with `EBUSY` / `rmdir ... node_modules/.cache`:** Railway mounts a cache at that path; `npm ci` can conflict with it. This repo’s `frontend/railway.toml` uses `npm install` instead. If it still fails, add a service variable **`NIXPACKS_NO_CACHE=1`** (disables Nixpacks build caches; slower but reliable).
 
+**Frontend logs: `npm error signal SIGTERM` / `command sh -c next start`:** Usually **normal** — Railway sends **SIGTERM** when **replacing** the container (new deploy) or stopping the service. It is not necessarily an app crash. If the site **never** loads, check **Networking** target port matches **`PORT`** (often **8080**) and that the latest deploy **succeeded**. This repo starts with `exec next start -H 0.0.0.0 -p $PORT` so the server binds correctly without going through `npm start` on Railway.
+
 ### Postgres “connection refused” to `*.railway.internal`
 
 That host is Railway’s **private** network. Refused usually means:

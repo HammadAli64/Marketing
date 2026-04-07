@@ -9,4 +9,5 @@ builder = "NIXPACKS"
 buildCommand = "NPM_CONFIG_PRODUCTION=false npm install --no-audit --no-fund && npm run build"
 
 [deploy]
-startCommand = "npm start"
+# `exec` + explicit port: Railway injects PORT; npm would show SIGTERM as npm error on deploy stop.
+startCommand = "sh -c 'exec next start -H 0.0.0.0 -p ${PORT:-8080}'"

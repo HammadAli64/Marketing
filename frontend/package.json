@@ -13,7 +13,7 @@
     "dev:fresh": "npm run clean && next dev",
     "build": "next build",
     "build:clean": "npm run clean && next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0",
     "preview": "npm run build:clean && next start",
     "lint": "next lint"
   },
