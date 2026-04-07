@@ -4,7 +4,11 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.static import serve
 
+from inquiries.views import health
+
 urlpatterns = [
+    # Probes often hit `/` (Railway, load balancers). Avoid 404 here.
+    path("", health, name="root_health"),
     path("admin/", admin.site.urls),
     path("api/", include("inquiries.urls")),
     path("api/cms/", include("cms.urls")),
