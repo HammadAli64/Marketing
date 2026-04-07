@@ -41,6 +41,10 @@ export const metadata: Metadata = {
   },
   description:
     "Helix Prime Solutions builds conversion-obsessed websites, dominates SEO, ships profit-driving apps, and provides elite staff augmentation—engineered for US businesses that want measurable revenue growth.",
+  icons: {
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    apple: [{ url: "/logo.png", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

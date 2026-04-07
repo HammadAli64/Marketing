@@ -158,8 +158,9 @@ export function ImpactStatsSection({ stats }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, {
     once: true,
-    amount: 0.12,
-    rootMargin: "0px 0px 20% 0px",
+    // Easier to satisfy on small viewports + tall sections; IO still uses multi-threshold hook.
+    amount: 0.06,
+    rootMargin: "0px 0px 25% 0px",
   });
   const reduceMotion = usePrefersReducedMotion();
 

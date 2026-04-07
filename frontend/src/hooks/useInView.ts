@@ -9,8 +9,16 @@ type Options = {
   rootMargin?: string;
 };
 
+/** Multiple ratios so mobile Safari / Chrome fire callbacks reliably (single float threshold is flaky). */
+function buildThresholds(thr: number): number[] {
+  if (thr <= 0) return [0, 0.01, 1];
+  if (thr >= 1) return [1];
+  const raw = [0, thr * 0.5, thr, Math.min(1, thr + 0.01), 1];
+  return [...new Set(raw)].sort((a, b) => a - b);
+}
+
 /**
- * IntersectionObserver helper. Uses a single threshold (no brittle ratio edge cases).
+ * IntersectionObserver helper. Uses a threshold *array* — required for consistent mobile behavior.
  */
 export function useInView(
   ref: RefObject<Element | null>,
@@ -23,7 +31,7 @@ export function useInView(
     if (!el) return;
 
     const thr = Math.min(1, Math.max(0, amount));
-    const threshold = thr <= 0 ? 0 : thr;
+    const threshold = buildThresholds(thr);
 
     const obs = new IntersectionObserver(
       (entries) => {
