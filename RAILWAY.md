@@ -51,7 +51,7 @@ After the first deploy, run migrations if needed (the **Procfile** / `railway.to
 
 1. Latest deploy must be **successful** (migrate + gunicorn running). Check **Deployments → Logs** for errors.
 2. **Settings → Networking → Public networking** → generate a domain. **Target port** must match the port the app listens on. This project binds to **`${PORT:-8080}`** — Railway usually sets **`PORT`** (often `8080`). Use that value.
-3. If the service **starts then stops**, check **Settings → Health check** (if present): path **`/`** or **`/api/health/`**, same port as the app (**8080** by default). This project returns **`{"ok": true}`** for both **`/`** and **`/api/health/`**.
+3. If the service **starts then stops** right after Gunicorn listens, the **health probe** may be failing. Probes often hit the container over **plain HTTP** without `X-Forwarded-Proto`; with **`SECURE_SSL_REDIRECT`**, Django used to answer **301 → HTTPS** and the probe failed. **`SECURE_REDIRECT_EXEMPT`** in `settings.py` covers **`/`** and **`/api/health/`**; **`backend/railway.toml`** sets **`healthcheckPath = "/api/health/"`**. In the Railway UI, align the health path with that (or rely on config-as-code). If issues persist, set **`DJANGO_SECURE_SSL_REDIRECT=false`** on the backend service.
 4. **Gunicorn `[INFO]` lines labeled `[error]` in Railway** are normal — Gunicorn logs to stderr.
 
 ## 3. Frontend environment variables

@@ -9,3 +9,6 @@ buildCommand = "pip install -r requirements.txt && DJANGO_COLLECTSTATIC_BUILD=1 
 [deploy]
 # ${PORT:-8080}: Railway sets PORT; default helps public URL generation if PORT were missing.
 startCommand = "sh -c 'python manage.py migrate --noinput && python manage.py ensure_superuser && exec gunicorn helix_backend.wsgi:application --bind 0.0.0.0:${PORT:-8080}'"
+# Matches SECURE_REDIRECT_EXEMPT in settings (HTTP probe without TLS proxy headers).
+healthcheckPath = "/api/health/"
+healthcheckTimeout = 60

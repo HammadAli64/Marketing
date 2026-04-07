@@ -170,6 +170,10 @@ if not DEBUG:
         "true",
         "yes",
     )
+    # Platform health probes often call the container over HTTP without X-Forwarded-Proto;
+    # a 301 to https makes the probe fail and the service restarts in a loop.
+    if SECURE_SSL_REDIRECT:
+        SECURE_REDIRECT_EXEMPT = [r"^/$", r"^/api/health/?$"]
 
 _csrf_origins = os.environ.get("CSRF_TRUSTED_ORIGINS", "").strip()
 if _csrf_origins:
