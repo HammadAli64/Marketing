@@ -60,6 +60,8 @@ Set these in the **frontend** service. **`NEXT_PUBLIC_*` must be present before 
 
 Optional: social links, Tawk, etc. — see `frontend/.env.example`.
 
+**Frontend build fails with `EBUSY` / `rmdir ... node_modules/.cache`:** Railway mounts a cache at that path; `npm ci` can conflict with it. This repo’s `frontend/railway.toml` uses `npm install` instead. If it still fails, add a service variable **`NIXPACKS_NO_CACHE=1`** (disables Nixpacks build caches; slower but reliable).
+
 ## 4. Postgres and uploads
 
 - **Database:** Link Postgres to the backend service so `DATABASE_URL` is set; do not rely on SQLite on Railway for production.

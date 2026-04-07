@@ -3,7 +3,10 @@
 
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm ci && npm run build"
+# Avoid `npm ci` here: Railway’s BuildKit cache is mounted at `node_modules/.cache`, and
+# `npm ci` tries to wipe `node_modules`, which hits EBUSY (rmdir). `npm install` updates in place.
+# NPM_CONFIG_PRODUCTION=false keeps devDependencies (TypeScript, Tailwind, ESLint) for `next build`.
+buildCommand = "NPM_CONFIG_PRODUCTION=false npm install --no-audit --no-fund && npm run build"
 
 [deploy]
 startCommand = "npm start"
