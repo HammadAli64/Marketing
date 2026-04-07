@@ -77,9 +77,26 @@ _collectstatic_build = os.environ.get("DJANGO_COLLECTSTATIC_BUILD", "").lower() 
     "yes",
 )
 
-# Railway / Postgres: non-empty DATABASE_URL from linked PostgreSQL. Empty or broken URLs
-# (e.g. manual override to blank) yield Postgres config without NAME and crash migrate.
-_database_url = os.environ.get("DATABASE_URL", "").strip()
+# Railway / Postgres: prefer linked DATABASE_URL (private *.railway.internal). If you see
+# "connection refused" to .railway.internal, Postgres may be down or private DNS not ready;
+# set DJANGO_USE_PUBLIC_DATABASE=1 and reference Postgres DATABASE_PUBLIC_URL instead.
+def _database_url_from_env() -> str:
+    override = os.environ.get("DJANGO_DATABASE_URL", "").strip()
+    if override:
+        return override
+    use_public = os.environ.get("DJANGO_USE_PUBLIC_DATABASE", "").lower() in (
+        "1",
+        "true",
+        "yes",
+    )
+    if use_public:
+        pub = os.environ.get("DATABASE_PUBLIC_URL", "").strip()
+        if pub:
+            return pub
+    return os.environ.get("DATABASE_URL", "").strip()
+
+
+_database_url = _database_url_from_env()
 _on_railway = bool(os.environ.get("RAILWAY_ENVIRONMENT"))
 
 if _collectstatic_build:

@@ -17,6 +17,9 @@ Set these in the **backend** service (Railway → Variables).
 | Variable | Required | Example / notes |
 |----------|----------|-----------------|
 | `DATABASE_URL` | Yes (production) | Injected when Postgres is **linked** to this service. Do **not** add an empty `DATABASE_URL` variable (it overrides the reference and breaks migrate with “supply the NAME”). Use **Variables → Reference** → `${{Postgres.DATABASE_URL}}` (name may vary). The image **build** runs `collectstatic` with `DJANGO_COLLECTSTATIC_BUILD=1` so a partial URL during build does not need a database name. If the URL has **no database path**, Django falls back to **`PGDATABASE`** (set by Railway) or **`railway`** (Railway’s default DB name). Override with **`DJANGO_POSTGRES_DEFAULT_DB`** if your DB has another name. |
+| `DATABASE_PUBLIC_URL` | Optional | Shown on the **Postgres** service (public TCP). Use only if you set **`DJANGO_USE_PUBLIC_DATABASE=1`** on the backend (see troubleshooting below). |
+| `DJANGO_USE_PUBLIC_DATABASE` | Optional | Set to `1` to connect via **`DATABASE_PUBLIC_URL`** instead of private `DATABASE_URL` when private networking returns **connection refused**. |
+| `DJANGO_DATABASE_URL` | Optional | If set, **overrides** both URLs (paste a full `postgresql://…` for debugging). |
 | `DJANGO_SECRET_KEY` | Yes | Long random string (50+ chars). |
 | `DJANGO_DEBUG` | Yes | `false` in production. |
 | `DJANGO_ALLOWED_HOSTS` | Yes | Your backend hostname(s), comma-separated, **no** `https://`. Example: `your-api.up.railway.app` |
@@ -66,6 +69,16 @@ Set these in the **frontend** service. **`NEXT_PUBLIC_*` must be present before 
 Optional: social links, Tawk, etc. — see `frontend/.env.example`.
 
 **Frontend build fails with `EBUSY` / `rmdir ... node_modules/.cache`:** Railway mounts a cache at that path; `npm ci` can conflict with it. This repo’s `frontend/railway.toml` uses `npm install` instead. If it still fails, add a service variable **`NIXPACKS_NO_CACHE=1`** (disables Nixpacks build caches; slower but reliable).
+
+### Postgres “connection refused” to `*.railway.internal`
+
+That host is Railway’s **private** network. Refused usually means:
+
+1. **Postgres isn’t running** — open the Postgres service in Railway; ensure it’s deployed and healthy (not crashed or sleeping on a free tier).
+2. **Backend and Postgres are in the same project** and the backend **references** that Postgres `DATABASE_URL` (not an old/copied URL from another project).
+3. **Race on first boot** — redeploy backend after Postgres is healthy.
+
+**Workaround:** On the **backend** service add variable **`DJANGO_USE_PUBLIC_DATABASE=1`** and a **reference** to the Postgres service’s **`DATABASE_PUBLIC_URL`** (in addition to or instead of private `DATABASE_URL`, depending how you name variables — the code prefers `DATABASE_PUBLIC_URL` when the flag is set). Public URL uses TLS; Django/psycopg2 will use `sslmode` from the URL if present.
 
 ## 4. Postgres and uploads
 
