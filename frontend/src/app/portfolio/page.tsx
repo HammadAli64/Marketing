@@ -25,9 +25,8 @@ export default async function PortfolioPage() {
           Work that reflects how we think
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-          Add and publish projects in{" "}
-          <span className="text-slate-800 dark:text-slate-300">Admin → Projects</span>
-          —each card links to a full case page.
+          Case studies and delivery snapshots—each card links to the full story, stack, and
+          outcomes.
         </p>
       </Reveal>
 
@@ -49,8 +48,8 @@ export default async function PortfolioPage() {
                       sizes="(max-width:768px) 100vw, 50vw"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-brand/20 via-slate-100 to-cyan-700/10 text-xs text-slate-500 dark:via-helix-elevated">
-                      Upload cover in admin
+                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-brand/20 via-slate-100 to-cyan-700/10 text-3xl font-bold text-brand dark:via-helix-elevated">
+                      {p.title.slice(0, 1)}
                     </div>
                   )}
                 </div>
@@ -74,7 +73,7 @@ export default async function PortfolioPage() {
         </div>
       ) : (
         <p className="mt-14 text-slate-600 dark:text-slate-400">
-          No portfolio projects in the CMS yet. Add them in Django admin.
+          Case studies are being added. Check back soon—or contact us to discuss similar work.
         </p>
       )}
 

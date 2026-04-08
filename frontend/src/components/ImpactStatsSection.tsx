@@ -183,11 +183,8 @@ export function ImpactStatsSection({ stats }: Props) {
                 Numbers That Actually Matter
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-                Snapshot metrics we stand behind—edit the values in{" "}
-                <code className="rounded bg-slate-200/80 px-1.5 py-0.5 text-sm dark:bg-white/10">
-                  siteContent.ts
-                </code>{" "}
-                if you need different numbers.
+                Snapshot metrics we stand behind—renewal rates, response standards, and delivery
+                discipline you can hold us to.
               </p>
             </div>
           </div>

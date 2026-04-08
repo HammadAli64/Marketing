@@ -43,7 +43,7 @@ export function BlogsListingClient({ posts }: Props) {
         {filtered.length === 0 ? (
           <p className="text-center text-lg text-slate-600 dark:text-slate-400">
             {posts.length === 0
-              ? "No blog posts in the CMS yet. Add them in Django admin."
+              ? "No articles published yet. Check back soon."
               : "No articles match that title. Try another search."}
           </p>
         ) : (

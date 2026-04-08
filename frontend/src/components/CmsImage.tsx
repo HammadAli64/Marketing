@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-/** If the API returns a root-relative /media/... URL, load it from the Django origin. */
+/** Resolve root-relative /media/... URLs against NEXT_PUBLIC_API_URL. */
 function resolveCmsSrc(src: string): string {
   const s = src.trim();
   if (/^https?:\/\//i.test(s)) return s;

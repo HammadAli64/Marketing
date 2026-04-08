@@ -241,8 +241,7 @@ export default async function AboutPage() {
                 Inside our practice
               </h2>
               <p className="mt-3 max-w-xl text-sm text-slate-500 dark:text-slate-400">
-                Images are managed under <strong className="text-slate-600 dark:text-slate-300">About page</strong> in
-                Django admin (gallery inlines).
+                Moments from the field—how we collaborate, ship, and support clients.
               </p>
             </Reveal>
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

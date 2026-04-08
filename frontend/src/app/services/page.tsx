@@ -25,10 +25,8 @@ export default async function ServicesPage() {
           Full-stack delivery for modern digital businesses
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-          Each card opens a dedicated page with scope and outcomes. Upload cover images and
-          detail copy in{" "}
-          <span className="text-slate-800 dark:text-slate-300">Django Admin → Services</span>
-          .
+          Each card links to a dedicated page with scope, deliverables, and how we measure success
+          together.
         </p>
       </Reveal>
 
@@ -80,7 +78,7 @@ export default async function ServicesPage() {
         </div>
       ) : (
         <p className="mt-14 text-slate-600 dark:text-slate-400">
-          No services in the CMS yet. Add them in Django admin.
+          New service offerings will appear here as they are published.
         </p>
       )}
 

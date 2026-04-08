@@ -1,5 +1,5 @@
 /**
- * Curated Unsplash URLs (hotlinked per Unsplash guidelines) — replace via Django admin when ready.
+ * Curated Unsplash URLs for placeholder imagery when a CMS image is not set.
  * Index is used for stable assignment; use unsplashForSeed() for slug-based variety.
  */
 const UNSPLASH = [

@@ -1,7 +1,4 @@
-/**
- * Static marketing copy for the Next.js app. Edit here and redeploy—no Django round-trip.
- * Django admin also drives **home** (hero, showcases, stats, testimonials) and **about** when the API is available; this file is the fallback copy.
- */
+/** Fallback static copy when the content API is unavailable (hero, stats, showcases, about). */
 import type {
   CmsAbout,
   CmsHero,

@@ -26,7 +26,7 @@ import {
   STATIC_TESTIMONIALS,
 } from "@/lib/siteContent";
 
-/** Home still loads services, projects, and blogs from Django; other sections are static. */
+/** Home loads services, projects, and blog posts from the API when available. */
 export const revalidate = 120;
 
 export default async function HomePage() {
@@ -178,7 +178,8 @@ export default async function HomePage() {
               Digital Weapons Built to Win
             </h2>
             <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600 dark:text-slate-400 sm:text-xl">
-              Explore what we offer—cards and detail pages are loaded from Django admin.
+              Explore end-to-end delivery—each card opens a full service page with scope,
+              outcomes, and clear next steps.
             </p>
           </Reveal>
           {orderedServices.length > 0 ? (
@@ -219,7 +220,7 @@ export default async function HomePage() {
           </div>
           ) : (
             <p className="mt-12 max-w-xl text-slate-600 dark:text-slate-400">
-              No services published yet. Add them in Django admin (CMS).
+              New service offerings will appear here as they are published.
             </p>
           )}
         </div>
@@ -239,7 +240,7 @@ export default async function HomePage() {
                   Proof. Not Promises.
                 </h2>
                 <p className="mt-3 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400 sm:text-xl">
-                  Selected work from your portfolio—add projects in Django admin to populate this section.
+                  Selected launches and engagements—evidence-first delivery, not slide-deck theater.
                 </p>
               </div>
               <Link
@@ -266,8 +267,8 @@ export default async function HomePage() {
                           sizes="(max-width:768px) 100vw, 33vw"
                         />
                       ) : (
-                        <div className="flex h-full items-center justify-center bg-gradient-to-br from-brand/20 via-slate-100 to-helix-gold/15 text-xs text-slate-500 dark:via-helix-elevated">
-                          Cover image (admin)
+                        <div className="flex h-full items-center justify-center bg-gradient-to-br from-brand/20 via-slate-100 to-helix-gold/15 text-2xl font-bold text-brand dark:via-helix-elevated">
+                          {p.title.slice(0, 1)}
                         </div>
                       )}
                     </div>
