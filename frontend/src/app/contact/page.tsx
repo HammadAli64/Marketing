@@ -68,8 +68,7 @@ export default async function ContactPage() {
               Inquiry form
             </h2>
             <p className="mt-3 text-base text-slate-600 dark:text-slate-400 sm:text-lg">
-              Submissions are stored securely and emailed to your team when SMTP is
-              configured.
+              We review every submission and follow up as soon as we can.
             </p>
             <div className="mt-8">
               <ContactForm serviceOptions={services} />

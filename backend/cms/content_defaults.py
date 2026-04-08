@@ -190,8 +190,7 @@ SHOWCASE_SEEDS: list[dict[str, Any]] = [
             "Discovery is not a workshop deck-it is a prioritized roadmap with trade-offs, "
             "timeline, and success metrics. Engineering follows the same thread: clean "
             "architecture, performance budgets, and instrumentation so marketing and "
-            "product can iterate with confidence.\n\n"
-            "Upload a supporting image in Admin for this block when ready."
+            "product can iterate with confidence."
         ),
         "order": 0,
         "image_on_right": False,
@@ -202,8 +201,7 @@ SHOWCASE_SEEDS: list[dict[str, Any]] = [
             "We treat accessibility, security basics, and observability as part of "
             "launch-not post-launch debt. That means fewer surprises in production, "
             "cleaner handoffs to your internal team, and partners who can defend the "
-            "work in front of stakeholders.\n\n"
-            "Toggle image position or add imagery from Admin to match your brand."
+            "work in front of stakeholders."
         ),
         "order": 1,
         "image_on_right": True,
@@ -481,8 +479,7 @@ BLOG_POST_SEEDS: list[dict[str, Any]] = [
             "conversion, retention, or cost-to-serve.\n\n"
             "Ask for examples of instrumentation, release cadence, and how they "
             "handle production incidents. Ask who owns communication and how often "
-            "executives see progress without a status theater meeting.\n\n"
-            "Replace this article with your own thought leadership anytime in Admin."
+            "executives see progress without a status theater meeting."
         ),
         "is_published": True,
         "order": 0,
@@ -503,8 +500,7 @@ BLOG_POST_SEEDS: list[dict[str, Any]] = [
             "Ranking without speed and clarity still loses to competitors who load "
             "faster and answer the buyer's question in the first screen.\n\n"
             "We combine crawl fixes, structured data, and template-level UX so organic "
-            "visitors hit pages built to convert-not generic blog shells.\n\n"
-            "Edit or extend this post from Django Admin when you are ready."
+            "visitors hit pages built to convert-not generic blog shells."
         ),
         "is_published": True,
         "order": 1,
