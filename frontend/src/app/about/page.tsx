@@ -75,7 +75,7 @@ export default function AboutPage() {
           aria-hidden
         />
 
-        <div className="relative mx-auto flex min-h-[min(85vh,720px)] max-w-6xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-32">
+        <div className="relative mx-auto flex min-h-[min(85vh,720px)] max-w-screen-2xl flex-col justify-end px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-32">
           <Reveal>
             <div className="max-w-3xl drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
               <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand backdrop-blur-sm">
@@ -132,7 +132,7 @@ export default function AboutPage() {
           className="pointer-events-none absolute right-0 top-0 h-96 w-96 translate-x-1/3 -translate-y-1/4 rounded-full bg-brand/5 blur-3xl dark:bg-brand/10"
           aria-hidden
         />
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="relative mx-auto max-w-screen-2xl px-4 sm:px-6">
           <div className="grid gap-14 lg:grid-cols-12 lg:gap-16 lg:items-start">
             <div className="lg:col-span-7">
               <Reveal>
@@ -187,7 +187,7 @@ export default function AboutPage() {
 
       {/* Trust pillars */}
       <section className="border-b border-slate-200 bg-slate-50 py-16 dark:border-helix-border dark:bg-[#0a0f1c] sm:py-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
           <Reveal>
             <div className="max-w-2xl">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
@@ -234,7 +234,7 @@ export default function AboutPage() {
       {/* Gallery */}
       {about.images.length > 0 ? (
         <section className="border-b border-slate-200 bg-white py-16 dark:border-helix-border dark:bg-helix-bg sm:py-24">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
             <Reveal>
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
                 Gallery
@@ -281,7 +281,7 @@ export default function AboutPage() {
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(0,232,255,0.12),transparent)]"
           aria-hidden
         />
-        <div className="relative mx-auto max-w-6xl px-4 text-center sm:px-6">
+        <div className="relative mx-auto max-w-screen-2xl px-4 text-center sm:px-6">
           <Reveal>
             <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
               Ready for your unfair advantage?

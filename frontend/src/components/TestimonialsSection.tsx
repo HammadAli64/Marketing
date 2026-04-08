@@ -80,7 +80,7 @@ export function TestimonialsSection({
       id="testimonials"
       className="border-t border-slate-200 bg-slate-50/80 py-16 dark:border-helix-border dark:bg-helix-surface/80 sm:py-24"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
           {eyebrow}
         </p>

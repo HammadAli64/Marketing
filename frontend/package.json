@@ -7,7 +7,7 @@
   },
   "scripts": {
     "clean": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true})}catch(e){}\"",
-    "dev": "npm run clean && next dev",
+    "dev": "next dev",
     "dev:quick": "next dev",
     "dev:turbo": "npm run clean && next dev --turbopack",
     "dev:fresh": "npm run clean && next dev",

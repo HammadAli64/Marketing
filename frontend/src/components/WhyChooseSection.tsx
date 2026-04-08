@@ -69,7 +69,7 @@ export function WhyChooseSection() {
         aria-hidden
       />
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-screen-2xl px-4 sm:px-6">
         <Reveal className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center rounded-full border border-brand/30 bg-brand/[0.07] px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.28em] text-brand dark:border-brand/40 dark:bg-brand/10 dark:text-[#5ff4ff] sm:text-xs">
             Why Helix Prime

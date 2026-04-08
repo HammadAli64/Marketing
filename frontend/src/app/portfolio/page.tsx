@@ -16,7 +16,7 @@ export default async function PortfolioPage() {
   const projects = await fetchProjectsList();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <div className="mx-auto max-w-screen-2xl px-4 py-16 sm:px-6 sm:py-24">
       <Reveal>
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
           Portfolio

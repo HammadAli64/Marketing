@@ -15,7 +15,7 @@ export default async function ContactPage() {
   const services = await fetchServicesList();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <div className="mx-auto max-w-screen-2xl px-4 py-16 sm:px-6 sm:py-24">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
         <div>
           <Reveal>

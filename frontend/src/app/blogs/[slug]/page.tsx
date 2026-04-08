@@ -82,7 +82,7 @@ export default async function BlogArticlePage({ params }: Props) {
             aria-hidden
           />
         )}
-        <div className="relative mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20">
+        <div className="relative mx-auto max-w-screen-2xl px-4 py-14 sm:px-6 sm:py-20">
           <Link
             href="/blogs"
             className={`text-sm font-medium hover:underline ${
@@ -121,7 +121,7 @@ export default async function BlogArticlePage({ params }: Props) {
         </div>
       </section>
 
-      <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-screen-2xl px-4 py-14 sm:px-6 sm:py-20">
         {post.bullets.length > 0 ? (
           <Reveal>
             <h2 className="font-display text-xl font-semibold text-helix-heading dark:text-white">

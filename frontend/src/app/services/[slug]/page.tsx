@@ -64,7 +64,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             aria-hidden
           />
         )}
-        <div className="relative mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+        <div className="relative mx-auto max-w-screen-2xl px-4 py-14 sm:px-6 sm:py-20">
           <Link
             href="/services"
             className="text-sm font-medium text-brand hover:text-brand-hover dark:hover:text-brand"
@@ -88,7 +88,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         </div>
       </section>
 
-      <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20">
+      <div className="mx-auto max-w-screen-2xl px-4 py-14 sm:px-6 sm:py-20">
         <div className="space-y-6">
           {s.body_paragraphs.map((para, i) => (
             <Reveal key={i} delay={0.04 * i}>

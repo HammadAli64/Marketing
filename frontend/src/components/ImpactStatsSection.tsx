@@ -172,7 +172,7 @@ export function ImpactStatsSection({ stats }: Props) {
       id="impact"
       className="border-y border-slate-200 bg-gradient-to-b from-slate-100 via-white to-slate-100 py-16 dark:border-white/10 dark:from-[#070b14] dark:via-[#0A1128] dark:to-[#070b14] sm:py-24"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
         <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-5">
             <div>

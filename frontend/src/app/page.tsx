@@ -88,7 +88,7 @@ export default async function HomePage() {
           className="pointer-events-none absolute inset-0 bg-grid-fade-dark opacity-[0.2] dark:opacity-[0.25]"
           aria-hidden
         />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-20 pt-24 sm:px-6 sm:pb-28 sm:pt-28">
+        <div className="relative z-10 mx-auto w-full max-w-screen-2xl px-4 pb-20 pt-24 sm:px-6 sm:pb-28 sm:pt-28">
           <div className="max-w-4xl">
             {heroEyebrow ? (
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand drop-shadow-sm">
@@ -130,7 +130,7 @@ export default async function HomePage() {
       <HomeShowcasesSection showcases={showcases} />
 
       <section id="services" className="border-t border-slate-200 py-20 dark:border-helix-border sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
           <Reveal>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
               Services
@@ -193,7 +193,7 @@ export default async function HomePage() {
           id="portfolio"
           className="border-t border-slate-200 bg-slate-50 py-20 dark:border-helix-border dark:bg-helix-surface sm:py-28"
         >
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
             <Reveal className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h2 className="font-display text-3xl font-bold text-helix-heading dark:text-white sm:text-5xl">
@@ -265,7 +265,7 @@ export default async function HomePage() {
         id="contact"
         className="border-t border-slate-200 bg-slate-50 py-16 dark:border-helix-border dark:bg-helix-surface sm:py-24"
       >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
           <Reveal>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
               Contact

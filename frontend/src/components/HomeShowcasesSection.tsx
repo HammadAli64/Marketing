@@ -9,7 +9,7 @@ export function HomeShowcasesSection({ showcases }: Props) {
 
   return (
     <section className="border-t border-slate-200 bg-white py-16 dark:border-helix-border dark:bg-helix-bg sm:py-24">
-      <div className="mx-auto max-w-6xl space-y-20 px-4 sm:px-6 sm:space-y-28">
+      <div className="mx-auto max-w-screen-2xl space-y-20 px-4 sm:px-6 sm:space-y-28">
         {showcases.map((block, i) => {
           const imgRight = block.image_on_right;
           const imageOrder = imgRight

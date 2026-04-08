@@ -39,7 +39,7 @@ export function BlogsListingClient({ posts }: Props) {
         </p>
       </div>
 
-      <div className="mx-auto mt-14 max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto mt-14 max-w-screen-2xl px-4 sm:px-6">
         {filtered.length === 0 ? (
           <p className="text-center text-lg text-slate-600 dark:text-slate-400">
             {posts.length === 0

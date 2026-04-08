@@ -91,7 +91,7 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/90 bg-white/90 backdrop-blur-md dark:border-helix-border dark:bg-helix-bg/90">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between gap-2 px-4 sm:px-6">
         <Link href="/" prefetch={false} className="group relative z-10 flex min-w-0 items-center gap-2">
           <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-helix-bg shadow-lg shadow-brand/20 ring-1 ring-white/10 transition group-hover:shadow-brand/35">
             <Image

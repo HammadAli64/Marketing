@@ -66,7 +66,7 @@ export function StaffAugmentationSection() {
         aria-hidden
       />
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-screen-2xl px-4 sm:px-6">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-14 lg:items-start">
           {/* Intro — sticky on large screens */}
           <div className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">

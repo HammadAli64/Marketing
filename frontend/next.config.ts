@@ -36,11 +36,7 @@ const unsplashPattern = {
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  /**
-   * Avoids dev-only errors: "SegmentViewNode ... not in the React Client Manifest" and
-   * `__webpack_modules__[moduleId] is not a function` when webpack HMR + next-devtools race
-   * (common with `webpack.cache = false` on Windows). Re-enable if you need the segment tree UI.
-   */
+  /** DevTools segment explorer can race with HMR on some setups; leave off unless you need it. */
   experimental: {
     devtoolSegmentExplorer: false,
   },
@@ -54,14 +50,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [mediaRemotePattern(), unsplashPattern],
   },
   /**
-   * Webpack dev only (default `npm run dev`). Disables persistent cache on Windows so `.next`
-   * does not end up half-written (ENOENT manifests / *.tmp build files) when HMR races or AV locks files.
+   * Dev: keep webpack’s default cache. Setting `cache = false` on Windows has been observed to
+   * produce broken `.next` output (e.g. MODULE_NOT_FOUND for `vendor-chunks/@swc.js`), which
+   * surfaces as missing CSS/JS in the browser. If `.next` ever looks corrupt, run `npm run dev:fresh`.
    */
   webpack: (config, { dev }) => {
     if (dev) {
-      config.cache = false;
       config.infrastructureLogging = { level: "error" };
-      // Reduces ChunkLoadError on slow disks / Windows AV when layout.js is slow to serve.
       if (config.output && typeof config.output === "object") {
         (config.output as { chunkLoadTimeout?: number }).chunkLoadTimeout = 120_000;
       }

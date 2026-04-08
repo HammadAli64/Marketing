@@ -18,7 +18,7 @@ export function AboutHomeSection({ intro }: Props) {
       id="about"
       className="border-t border-slate-200 bg-slate-50 py-20 dark:border-helix-border dark:bg-helix-surface sm:py-28"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
             About us

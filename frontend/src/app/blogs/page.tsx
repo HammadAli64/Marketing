@@ -17,7 +17,7 @@ export default async function BlogsPage() {
   return (
     <div className="border-b border-slate-200 pb-20 dark:border-helix-border sm:pb-28">
       <section className="border-b border-slate-200 bg-gradient-to-b from-slate-50 to-white py-16 dark:border-helix-border dark:from-helix-bg dark:to-helix-surface sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
+        <div className="mx-auto max-w-screen-2xl px-4 text-center sm:px-6">
           <Reveal>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand">
               Insights
