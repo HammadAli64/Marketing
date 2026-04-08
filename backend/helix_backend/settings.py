@@ -278,10 +278,34 @@ if not DEBUG:
         SECURE_REDIRECT_EXEMPT = [r"^/$", r"^/api/health/?$"]
 
 _csrf_origins = os.environ.get("CSRF_TRUSTED_ORIGINS", "").strip()
-if _csrf_origins:
-    CSRF_TRUSTED_ORIGINS = [
-        o.strip() for o in _csrf_origins.split(",") if o.strip()
-    ]
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(",") if o.strip()]
+
+
+def _normalize_origin(raw: str) -> str:
+    """Return scheme+host origin, e.g. https://api.example.com."""
+    s = (raw or "").strip().rstrip("/")
+    if not s:
+        return ""
+    if not s.startswith(("http://", "https://")):
+        s = f"https://{s}"
+    try:
+        p = urlparse(s)
+        if not p.scheme or not p.netloc:
+            return ""
+        return f"{p.scheme}://{p.netloc}"
+    except Exception:
+        return ""
+
+
+# Trust this service origin automatically on Railway (admin/logout POSTs from the
+# default *.up.railway.app URL can fail otherwise if env var misses it).
+for _origin_candidate in (
+    os.environ.get("RAILWAY_PUBLIC_DOMAIN", ""),
+    DJANGO_PUBLIC_BASE_URL,
+):
+    _o = _normalize_origin(_origin_candidate)
+    if _o and _o not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_o)
 
 # CORS — Next.js dev server and production
 _cors = os.environ.get(
