@@ -22,6 +22,12 @@ def _media_url(request, filefield):
     if not filefield or not getattr(filefield, "name", None):
         return None
     path = filefield.url
+    if path.startswith(("http://", "https://")):
+        return path
+    # MEDIA_URL may be "media/..." without a leading slash; joining with DJANGO_PUBLIC_BASE_URL
+    # must not produce "https://hostmedia/..." (missing slash before /media/).
+    if not path.startswith("/"):
+        path = "/" + path.lstrip("/")
     base = getattr(settings, "DJANGO_PUBLIC_BASE_URL", "") or ""
     if base:
         return f"{base.rstrip('/')}{path}"

@@ -173,7 +173,7 @@ STORAGES = {
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 _media_root_env = os.environ.get("DJANGO_MEDIA_ROOT", "").strip()
 MEDIA_ROOT = Path(_media_root_env) if _media_root_env else (BASE_DIR / "media")
 
