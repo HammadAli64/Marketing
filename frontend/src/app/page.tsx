@@ -75,59 +75,90 @@ export default async function HomePage() {
             src={heroBackground}
             alt=""
             fill
-            className="object-cover"
+            className="object-cover object-center"
             sizes="100vw"
             priority
+            quality={92}
           />
+          {/* Keep photo visible: light top/mid, stronger only at bottom for headline contrast */}
           <div
-            className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/62 to-black/[0.92]"
+            className="absolute inset-0 bg-gradient-to-b from-helix-bg/35 via-black/20 to-black/75"
             aria-hidden
           />
           <div
-            className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-transparent sm:from-black/50"
+            className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/10 to-transparent sm:from-black/40"
             aria-hidden
           />
           <div
-            className="absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_70%_18%,rgba(0,232,255,0.1),transparent),radial-gradient(ellipse_45%_38%_at_12%_78%,rgba(212,175,55,0.07),transparent)]"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_75%_20%,rgba(0,232,255,0.14),transparent),radial-gradient(ellipse_40%_45%_at_15%_85%,rgba(212,175,55,0.08),transparent)]"
             aria-hidden
           />
         </div>
         <div
-          className="pointer-events-none absolute inset-0 bg-grid-fade-dark opacity-[0.2] dark:opacity-[0.25]"
+          className="pointer-events-none absolute inset-0 bg-grid-fade-dark opacity-[0.07] dark:opacity-[0.1]"
           aria-hidden
         />
         <div className="relative z-10 mx-auto w-full max-w-screen-2xl px-4 pb-20 pt-24 sm:px-6 sm:pb-28 sm:pt-28">
-          <div className="max-w-4xl">
-            {heroEyebrow ? (
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand drop-shadow-sm">
-                {heroEyebrow}
-              </p>
-            ) : null}
-            <h1 className="mt-5 max-w-4xl font-display text-4xl font-bold leading-[1.06] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.45)] sm:mt-6 sm:text-5xl md:text-6xl lg:text-7xl">
-              {heroHeadline}
-            </h1>
-            {heroSub ? (
-              <p className="mt-6 max-w-xl text-lg font-bold leading-snug text-white sm:text-xl [text-shadow:0_1px_2px_rgba(0,0,0,0.95),0_2px_20px_rgba(0,0,0,0.75)]">
-                {heroSub}
-              </p>
-            ) : null}
-            <div className="mt-11 flex flex-wrap gap-4">
-              {hero.cta_primary_label?.trim() ? (
-                <Link
-                  href={hero.cta_primary_link?.trim() || "/contact"}
-                  className="inline-flex min-h-[3.25rem] items-center justify-center rounded-xl bg-white px-8 py-3.5 text-sm font-bold uppercase tracking-[0.12em] text-helix-heading shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition hover:bg-slate-100 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]"
-                >
-                  {hero.cta_primary_label.trim()}
-                </Link>
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <div className="max-w-4xl">
+              {heroEyebrow ? (
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand drop-shadow-sm">
+                  {heroEyebrow}
+                </p>
               ) : null}
-              {hero.cta_secondary_label?.trim() ? (
-                <Link
-                  href={hero.cta_secondary_link?.trim() || "/services"}
-                  className="inline-flex min-h-[3.25rem] items-center justify-center rounded-xl border border-white/35 bg-black/25 px-8 py-3.5 text-base font-semibold text-white backdrop-blur-sm transition hover:border-white/50 hover:bg-black/35"
-                >
-                  {hero.cta_secondary_label.trim()}
-                </Link>
+              <h1 className="mt-5 max-w-4xl font-display text-4xl font-bold leading-[1.06] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)] sm:mt-6 sm:text-5xl md:text-6xl lg:text-7xl">
+                {heroHeadline}
+              </h1>
+              {heroSub ? (
+                <p className="mt-6 max-w-xl text-lg font-semibold leading-snug text-white/95 sm:text-xl [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]">
+                  {heroSub}
+                </p>
               ) : null}
+              <div className="mt-11 flex flex-wrap gap-4">
+                {hero.cta_primary_label?.trim() ? (
+                  <Link
+                    href={hero.cta_primary_link?.trim() || "/contact"}
+                    className="inline-flex min-h-[3.25rem] items-center justify-center rounded-xl bg-white px-8 py-3.5 text-sm font-bold uppercase tracking-[0.12em] text-helix-heading shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition hover:bg-slate-100 hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
+                  >
+                    {hero.cta_primary_label.trim()}
+                  </Link>
+                ) : null}
+                {hero.cta_secondary_label?.trim() ? (
+                  <Link
+                    href={hero.cta_secondary_link?.trim() || "/services"}
+                    className="inline-flex min-h-[3.25rem] items-center justify-center rounded-xl border border-white/40 bg-black/20 px-8 py-3.5 text-base font-semibold text-white backdrop-blur-sm transition hover:border-white/55 hover:bg-black/30"
+                  >
+                    {hero.cta_secondary_label.trim()}
+                  </Link>
+                ) : null}
+              </div>
+            </div>
+            <div className="hidden lg:block">
+              <div className="rounded-2xl border border-white/15 bg-gradient-to-br from-white/[0.12] to-white/[0.03] p-8 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-md">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+                  How we work
+                </p>
+                <ul className="mt-6 space-y-4 text-base leading-relaxed text-white/95">
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 text-brand" aria-hidden>
+                      ✓
+                    </span>
+                    Senior-led builds — architecture, delivery, and QA you can audit.
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 text-brand" aria-hidden>
+                      ✓
+                    </span>
+                    US-market positioning with reporting you can plan around.
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 shrink-0 text-brand" aria-hidden>
+                      ✓
+                    </span>
+                    Predictable ship cadence — no black-box sprints.
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
