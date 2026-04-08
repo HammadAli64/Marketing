@@ -1,6 +1,7 @@
 import { CmsImage } from "@/components/CmsImage";
 import { Reveal } from "@/components/Reveal";
 import type { CmsShowcase } from "@/lib/cms";
+import { PLACEHOLDER_SHOWCASE } from "@/lib/placeholders";
 
 type Props = { showcases: CmsShowcase[] };
 
@@ -18,6 +19,8 @@ export function HomeShowcasesSection({ showcases }: Props) {
           const copyOrder = imgRight
             ? "order-1 lg:order-1"
             : "order-2 lg:order-2";
+          const imageSrc =
+            (block.image && block.image.trim()) || PLACEHOLDER_SHOWCASE(i);
 
           return (
             <div
@@ -27,20 +30,13 @@ export function HomeShowcasesSection({ showcases }: Props) {
               <div
                 className={`relative aspect-[16/10] overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm dark:border-helix-border dark:bg-helix-elevated lg:aspect-auto lg:min-h-[280px] ${imageOrder}`}
               >
-                {block.image ? (
-                  <CmsImage
-                    src={block.image}
-                    alt={block.image_alt || block.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width:1024px) 100vw, 50vw"
-                  />
-                ) : (
-                  <div className="flex h-full min-h-[200px] items-center justify-center bg-gradient-to-br from-brand/15 via-slate-100 to-helix-gold/10 px-4 text-center text-sm text-slate-500 dark:from-brand/10 dark:via-helix-elevated dark:to-helix-gold/10 dark:text-slate-400">
-                    Set <code className="text-xs">image</code> on this block in{" "}
-                    <code className="text-xs">siteContent.ts</code>
-                  </div>
-                )}
+                <CmsImage
+                  src={imageSrc}
+                  alt={block.image_alt?.trim() || block.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width:1024px) 100vw, 50vw"
+                />
               </div>
               <div className={`flex flex-col justify-center ${copyOrder}`}>
                 <Reveal delay={0.04 * i}>

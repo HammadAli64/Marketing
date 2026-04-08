@@ -1,5 +1,3 @@
-import { navFallbackProjects, navFallbackServices } from "@/lib/navFallbacks";
-
 export function getServerApiBase(): string {
   return (
     process.env.CMS_API_URL?.replace(/\/$/, "") ||
@@ -133,8 +131,35 @@ export type CmsBlogPostDetail = CmsBlogPostCard & {
   published_at: string | null;
 };
 
-function servicesFromConstants(): CmsService[] {
-  return navFallbackServices();
+/** Full home CMS document (hero, showcases, stats, services, testimonials). */
+export type CmsHomePayload = {
+  hero: CmsHero;
+  showcases: CmsShowcase[];
+  stats: CmsStat[];
+  services: CmsService[];
+  testimonials: CmsTestimonial[];
+};
+
+export async function fetchHomePayload(): Promise<CmsHomePayload | null> {
+  const base = getServerApiBase();
+  try {
+    const res = await cmsFetch(`${base}/api/cms/home/`);
+    if (!res.ok) return null;
+    return (await res.json()) as CmsHomePayload;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchAboutFromCms(): Promise<CmsAbout | null> {
+  try {
+    const res = await cmsFetch(`${getServerApiBase()}/api/cms/about/`);
+    if (!res.ok) return null;
+    const j = (await res.json()) as { about: CmsAbout };
+    return j.about ?? null;
+  } catch {
+    return null;
+  }
 }
 
 function normalizeServices(list: CmsService[]): CmsService[] {
@@ -146,12 +171,9 @@ export async function fetchServicesList(): Promise<CmsService[]> {
     const res = await cmsFetch(`${getServerApiBase()}/api/cms/services/`);
     if (!res.ok) throw new Error(String(res.status));
     const j = (await res.json()) as { services: CmsService[] };
-    if (j.services?.length) {
-      return normalizeServices(j.services);
-    }
-    return servicesFromConstants();
+    return normalizeServices(j.services ?? []);
   } catch {
-    return servicesFromConstants();
+    return [];
   }
 }
 
@@ -182,18 +204,11 @@ export async function fetchServiceDetail(
         };
       }
     } catch {
-      /* timeout / network — use fallback */
+      /* timeout / network */
     }
   }
 
-  const list = servicesFromConstants();
-  const s = list.find((x) => x.slug === slug);
-  if (!s) return null;
-  return {
-    ...s,
-    hero_image: s.cover_image,
-    body_paragraphs: [s.summary],
-  };
+  return null;
 }
 
 export async function fetchServiceSlugs(): Promise<string[]> {
@@ -201,30 +216,20 @@ export async function fetchServiceSlugs(): Promise<string[]> {
     const res = await cmsFetch(`${getServerApiBase()}/api/cms/services/slugs/`);
     if (!res.ok) throw new Error(String(res.status));
     const j = (await res.json()) as { slugs: string[] };
-    if (j.slugs?.length) return j.slugs;
+    return j.slugs ?? [];
   } catch {
-    /* fallback */
+    return [];
   }
-  return navFallbackServices().map((s) => s.slug);
 }
-
-function fallbackProjects(): CmsProjectCard[] {
-  return navFallbackProjects();
-}
-
-export { navFallbackProjects, navFallbackServices };
 
 export async function fetchProjectsList(): Promise<CmsProjectCard[]> {
   try {
     const res = await cmsFetch(`${getServerApiBase()}/api/cms/projects/`);
     if (!res.ok) throw new Error(String(res.status));
     const j = (await res.json()) as { projects: CmsProjectCard[] };
-    if (j.projects?.length) {
-      return j.projects.map((p) => ({ ...p }));
-    }
-    return fallbackProjects();
+    return (j.projects ?? []).map((p) => ({ ...p }));
   } catch {
-    return fallbackProjects();
+    return [];
   }
 }
 
@@ -267,11 +272,10 @@ export async function fetchProjectSlugs(): Promise<string[]> {
     const res = await cmsFetch(`${getServerApiBase()}/api/cms/projects/slugs/`);
     if (!res.ok) throw new Error(String(res.status));
     const j = (await res.json()) as { slugs: string[] };
-    if (j.slugs?.length) return j.slugs;
+    return j.slugs ?? [];
   } catch {
-    /* use fallback */
+    return [];
   }
-  return fallbackProjects().map((p) => p.slug);
 }
 
 function normalizeBlogCard(p: CmsBlogPostCard): CmsBlogPostCard {
@@ -291,11 +295,10 @@ export async function fetchBlogsList(query?: string): Promise<CmsBlogPostCard[]>
     const res = await cmsFetch(url.toString());
     if (!res.ok) throw new Error(String(res.status));
     const j = (await res.json()) as { posts: CmsBlogPostCard[] };
-    if (j.posts?.length) return j.posts.map(normalizeBlogCard);
+    return (j.posts ?? []).map(normalizeBlogCard);
   } catch {
-    /* fallback */
+    return [];
   }
-  return [];
 }
 
 export async function fetchBlogSlugs(): Promise<string[]> {
@@ -303,11 +306,10 @@ export async function fetchBlogSlugs(): Promise<string[]> {
     const res = await cmsFetch(`${getServerApiBase()}/api/cms/blogs/slugs/`);
     if (!res.ok) throw new Error(String(res.status));
     const j = (await res.json()) as { slugs: string[] };
-    if (j.slugs?.length) return j.slugs;
+    return j.slugs ?? [];
   } catch {
-    /* fallback */
+    return [];
   }
-  return [];
 }
 
 export async function fetchBlogDetail(

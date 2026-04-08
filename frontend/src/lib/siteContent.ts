@@ -1,6 +1,6 @@
 /**
  * Static marketing copy for the Next.js app. Edit here and redeploy—no Django round-trip.
- * Django admin remains the source for **services**, **portfolio projects**, and **blog posts** only.
+ * Django admin also drives **home** (hero, showcases, stats, testimonials) and **about** when the API is available; this file is the fallback copy.
  */
 import type {
   CmsAbout,

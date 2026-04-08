@@ -31,6 +31,11 @@ export function unsplashForSeed(seed: string): string {
   return unsplashAt(Math.abs(h));
 }
 
-export const PLACEHOLDER_HERO = unsplashAt(0);
-export const PLACEHOLDER_ABOUT_HERO = unsplashAt(2);
+/** Full-bleed hero: team / collaboration (wider for LCP). */
+export const PLACEHOLDER_HERO =
+  "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1920&q=80";
+
+/** About hero: modern office / architecture. */
+export const PLACEHOLDER_ABOUT_HERO =
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80";
 export const PLACEHOLDER_SHOWCASE = (i: number) => unsplashAt(i + 4);

@@ -177,6 +177,11 @@ MEDIA_URL = "media/"
 _media_root_env = os.environ.get("DJANGO_MEDIA_ROOT", "").strip()
 MEDIA_ROOT = Path(_media_root_env) if _media_root_env else (BASE_DIR / "media")
 
+# Public origin of this API (no path, no trailing slash), e.g. https://your-api.up.railway.app
+# Used for absolute /media/... URLs in JSON. Set when server-side CMS fetches use a private
+# hostname (Railway internal) so the browser still loads images from the public URL.
+DJANGO_PUBLIC_BASE_URL = os.environ.get("DJANGO_PUBLIC_BASE_URL", "").strip().rstrip("/")
+
 # Behind Railway / reverse proxies (HTTPS).
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

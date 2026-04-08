@@ -3,12 +3,16 @@ import Link from "next/link";
 import { CmsImage } from "@/components/CmsImage";
 import { Reveal } from "@/components/Reveal";
 import { COMPANY } from "@/lib/constants";
+import { fetchAboutFromCms } from "@/lib/cms";
+import { PLACEHOLDER_ABOUT_HERO } from "@/lib/placeholders";
 import { STATIC_ABOUT } from "@/lib/siteContent";
 
 export const metadata: Metadata = {
   title: "About Us",
   description: `${COMPANY}—US-market strategy, elite engineering, and growth systems built for revenue and retention.`,
 };
+
+export const revalidate = 120;
 
 const TRUST_PILLARS = [
   {
@@ -35,41 +39,35 @@ const HIGHLIGHTS = [
   { label: "Retention", value: "Partnership" },
 ] as const;
 
-export default function AboutPage() {
-  const about = STATIC_ABOUT;
-  const hasHeroImg = Boolean(about.hero_background_image);
+export default async function AboutPage() {
+  const cmsAbout = await fetchAboutFromCms();
+  const about = cmsAbout ? { ...STATIC_ABOUT, ...cmsAbout } : STATIC_ABOUT;
+  const heroImg =
+    about.hero_background_image?.trim() || PLACEHOLDER_ABOUT_HERO;
+  const hasHeroImg = Boolean(heroImg);
 
   return (
     <div className="overflow-x-hidden">
       {/* Hero */}
       <section className="relative min-h-[min(85vh,720px)] overflow-hidden border-b border-slate-200 dark:border-helix-border">
-        {about.hero_background_image ? (
-          <>
-            <div className="absolute inset-0">
-              <CmsImage
-                src={about.hero_background_image}
-                alt=""
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority
-              />
-            </div>
-            <div
-              className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/50 to-[#0A1128]"
-              aria-hidden
-            />
-            <div
-              className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_70%_20%,rgba(0,232,255,0.15),transparent),radial-gradient(ellipse_50%_50%_at_10%_80%,rgba(212,175,55,0.1),transparent)]"
-              aria-hidden
-            />
-          </>
-        ) : (
-          <div
-            className="absolute inset-0 bg-gradient-to-br from-[#0A1128] via-[#0f1629] to-[#06080f]"
-            aria-hidden
+        <div className="absolute inset-0">
+          <CmsImage
+            src={heroImg}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
           />
-        )}
+        </div>
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/50 to-[#0A1128]"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_70%_20%,rgba(0,232,255,0.15),transparent),radial-gradient(ellipse_50%_50%_at_10%_80%,rgba(212,175,55,0.1),transparent)]"
+          aria-hidden
+        />
         <div
           className="pointer-events-none absolute inset-0 bg-grid-fade-dark opacity-30 dark:opacity-40"
           aria-hidden
@@ -243,8 +241,8 @@ export default function AboutPage() {
                 Inside our practice
               </h2>
               <p className="mt-3 max-w-xl text-sm text-slate-500 dark:text-slate-400">
-                To show a gallery here, add image URLs to <code className="text-slate-400">STATIC_ABOUT.images</code> in{" "}
-                <code className="text-slate-400">siteContent.ts</code> or wire a small API later.
+                Images are managed under <strong className="text-slate-600 dark:text-slate-300">About page</strong> in
+                Django admin (gallery inlines).
               </p>
             </Reveal>
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

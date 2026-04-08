@@ -11,7 +11,13 @@ import { StaffAugmentationSection } from "@/components/StaffAugmentationSection"
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { WhyChooseSection } from "@/components/WhyChooseSection";
 import { COMPANY, publicContactEmails, SERVICE_SLUG_ORDER } from "@/lib/constants";
-import { fetchBlogsList, fetchProjectsList, fetchServicesList } from "@/lib/cms";
+import {
+  fetchBlogsList,
+  fetchHomePayload,
+  fetchProjectsList,
+  fetchServicesList,
+} from "@/lib/cms";
+import { PLACEHOLDER_HERO } from "@/lib/placeholders";
 import {
   STATIC_ABOUT,
   STATIC_HERO,
@@ -24,19 +30,28 @@ import {
 export const revalidate = 120;
 
 export default async function HomePage() {
-  const [services, projects, blogPosts] = await Promise.all([
-    fetchServicesList(),
+  const [homePayload, projects, blogPosts] = await Promise.all([
+    fetchHomePayload(),
     fetchProjectsList(),
     fetchBlogsList(),
   ]);
-  const hero = STATIC_HERO;
-  const stats = STATIC_HOME_STATS;
-  const showcases = STATIC_SHOWCASES;
-  const testimonials = STATIC_TESTIMONIALS;
+
+  const hero = homePayload?.hero ?? STATIC_HERO;
+  const stats = homePayload?.stats?.length ? homePayload.stats : STATIC_HOME_STATS;
+  const showcases = homePayload?.showcases?.length
+    ? homePayload.showcases
+    : STATIC_SHOWCASES;
+  const testimonials = homePayload?.testimonials?.length
+    ? homePayload.testimonials
+    : STATIC_TESTIMONIALS;
+  const services = homePayload?.services?.length
+    ? homePayload.services
+    : await fetchServicesList();
+
   const featured = projects.slice(0, 3);
   const envHero = process.env.NEXT_PUBLIC_HERO_BACKGROUND?.trim();
   const heroBackground =
-    hero.background_image?.trim() || envHero || null;
+    hero.background_image?.trim() || envHero || PLACEHOLDER_HERO;
 
   const order = new Map<string, number>(
     SERVICE_SLUG_ORDER.map((slug, i) => [slug, i])
@@ -56,21 +71,14 @@ export default async function HomePage() {
         className="relative flex min-h-[90vh] items-center overflow-hidden bg-helix-bg"
       >
         <div className="absolute inset-0">
-          {heroBackground ? (
-            <CmsImage
-              src={heroBackground}
-              alt=""
-              fill
-              className="object-cover"
-              sizes="100vw"
-              priority
-            />
-          ) : (
-            <div
-              className="absolute inset-0 bg-gradient-to-br from-[#0A1128] via-[#0f1629] to-[#06080f]"
-              aria-hidden
-            />
-          )}
+          <CmsImage
+            src={heroBackground}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
           <div
             className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/62 to-black/[0.92]"
             aria-hidden

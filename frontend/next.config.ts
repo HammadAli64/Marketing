@@ -1,31 +1,54 @@
 import type { NextConfig } from "next";
 
-function mediaRemotePattern(): {
+/** Allow Next/Image to load /media/** from the API host(s). Add NEXT_PUBLIC_MEDIA_ORIGIN if media URLs use a different origin than NEXT_PUBLIC_API_URL. */
+function mediaRemotePatterns(): Array<{
   protocol: "http" | "https";
   hostname: string;
   port?: string;
   pathname: string;
-} {
-  try {
-    const url = new URL(
-      process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"
-    );
-    const protocol = (url.protocol.replace(":", "") as "http" | "https") || "http";
-    const port = url.port;
-    return {
-      protocol,
-      hostname: url.hostname,
-      ...(port ? { port } : {}),
-      pathname: "/media/**",
-    };
-  } catch {
-    return {
-      protocol: "http",
-      hostname: "127.0.0.1",
-      port: "8000",
-      pathname: "/media/**",
-    };
+}> {
+  const urls: string[] = [];
+  const primary = process.env.NEXT_PUBLIC_API_URL?.trim();
+  const extra = process.env.NEXT_PUBLIC_MEDIA_ORIGIN?.trim();
+  if (primary) urls.push(primary);
+  if (extra) urls.push(extra);
+  if (!urls.length) urls.push("http://127.0.0.1:8000");
+
+  const patterns: Array<{
+    protocol: "http" | "https";
+    hostname: string;
+    port?: string;
+    pathname: string;
+  }> = [];
+  const seen = new Set<string>();
+  for (const raw of urls) {
+    try {
+      const url = new URL(raw);
+      const key = `${url.protocol}//${url.host}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const protocol = (url.protocol.replace(":", "") as "http" | "https") || "http";
+      const port = url.port;
+      patterns.push({
+        protocol,
+        hostname: url.hostname,
+        ...(port ? { port } : {}),
+        pathname: "/media/**",
+      });
+    } catch {
+      /* skip */
+    }
   }
+  return patterns.length
+    ? patterns
+    : [
+        {
+          protocol: "http",
+          hostname: "127.0.0.1",
+          port: "8000",
+          pathname: "/media/**",
+        },
+      ];
 }
 
 const unsplashPattern = {
@@ -47,19 +70,18 @@ const nextConfig: NextConfig = {
     fetches: { fullUrl: false, hmrRefreshes: false },
   },
   images: {
-    remotePatterns: [mediaRemotePattern(), unsplashPattern],
+    remotePatterns: [...mediaRemotePatterns(), unsplashPattern],
   },
   /**
-   * Dev: keep webpack’s default cache. Setting `cache = false` on Windows has been observed to
-   * produce broken `.next` output (e.g. MODULE_NOT_FOUND for `vendor-chunks/@swc.js`), which
-   * surfaces as missing CSS/JS in the browser. If `.next` ever looks corrupt, run `npm run dev:fresh`.
+   * Dev (webpack) on Windows: polling avoids flaky watchers on Desktop/OneDrive/AV-scanned trees
+   * and reduces races writing `.next/static/development/_buildManifest.js.tmp.*`.
    */
   webpack: (config, { dev }) => {
     if (dev) {
-      config.infrastructureLogging = { level: "error" };
-      if (config.output && typeof config.output === "object") {
-        (config.output as { chunkLoadTimeout?: number }).chunkLoadTimeout = 120_000;
-      }
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
     }
     return config;
   },

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_GET
@@ -18,9 +19,13 @@ from .models import (
 
 
 def _media_url(request, filefield):
-    if filefield and getattr(filefield, "name", None):
-        return request.build_absolute_uri(filefield.url)
-    return None
+    if not filefield or not getattr(filefield, "name", None):
+        return None
+    path = filefield.url
+    base = getattr(settings, "DJANGO_PUBLIC_BASE_URL", "") or ""
+    if base:
+        return f"{base.rstrip('/')}{path}"
+    return request.build_absolute_uri(path)
 
 
 def _service_dict(request, s: Service):
@@ -54,8 +59,6 @@ def home_payload(request):
     )
     stats = cd.stats_json_from_db_or_default(list(HomeStat.objects.all()))
     services = [_service_dict(request, s) for s in Service.objects.all()]
-    if not services:
-        services = [cd.service_dict_from_seed(row) for row in cd.SERVICE_SEEDS]
 
     t_qs = HomeTestimonial.objects.filter(is_published=True)
     if t_qs.exists():
@@ -87,8 +90,6 @@ def home_payload(request):
 @require_GET
 def services_list(request):
     data = [_service_dict(request, s) for s in Service.objects.all()]
-    if not data:
-        data = [cd.service_dict_from_seed(row) for row in cd.SERVICE_SEEDS]
     return JsonResponse({"services": data})
 
 
@@ -97,10 +98,7 @@ def service_detail(request, slug: str):
     try:
         s = Service.objects.get(slug=slug)
     except Service.DoesNotExist:
-        row = cd.default_service_by_slug(slug)
-        if not row:
-            return JsonResponse({"detail": "Not found."}, status=404)
-        return JsonResponse(cd.service_detail_dict_from_seed(row))
+        return JsonResponse({"detail": "Not found."}, status=404)
     return JsonResponse(
         {
             "title": s.title,
@@ -118,8 +116,6 @@ def service_detail(request, slug: str):
 @require_GET
 def service_slugs(request):
     slugs = list(Service.objects.values_list("slug", flat=True))
-    if not slugs:
-        slugs = [r["slug"] for r in cd.SERVICE_SEEDS]
     return JsonResponse({"slugs": slugs})
 
 
@@ -192,10 +188,6 @@ def blogs_list(request):
         qs = qs.filter(title__icontains=q)
     qs = qs.order_by("order", "-published_at", "-id")
     data = [_blog_card_dict(request, b) for b in qs]
-    if not data and not BlogPost.objects.filter(is_published=True).exists():
-        data = [
-            cd.blog_card_from_seed(row) for row in cd.filter_blog_seeds_by_query(q)
-        ]
     return JsonResponse({"posts": data})
 
 
@@ -204,10 +196,7 @@ def blog_detail(request, slug: str):
     try:
         b = BlogPost.objects.get(slug=slug, is_published=True)
     except BlogPost.DoesNotExist:
-        row = cd.default_blog_by_slug(slug)
-        if not row:
-            return JsonResponse({"detail": "Not found."}, status=404)
-        return JsonResponse(cd.blog_detail_from_seed(row))
+        return JsonResponse({"detail": "Not found."}, status=404)
     out = _blog_card_dict(request, b)
     out["body_paragraphs"] = b.body_paragraphs()
     out["published_at"] = b.published_at.isoformat() if b.published_at else None
@@ -219,8 +208,6 @@ def blog_slugs(request):
     slugs = list(
         BlogPost.objects.filter(is_published=True).values_list("slug", flat=True)
     )
-    if not slugs:
-        slugs = [r["slug"] for r in cd.BLOG_POST_SEEDS]
     return JsonResponse({"slugs": slugs})
 
 
