@@ -57,6 +57,13 @@ const unsplashPattern = {
   pathname: "/**",
 };
 
+/** CMS uploads via Cloudinary (django-cloudinary-storage). */
+const cloudinaryPattern = {
+  protocol: "https" as const,
+  hostname: "res.cloudinary.com",
+  pathname: "/**",
+};
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   /** DevTools segment explorer can race with HMR on some setups; leave off unless you need it. */
@@ -70,7 +77,7 @@ const nextConfig: NextConfig = {
     fetches: { fullUrl: false, hmrRefreshes: false },
   },
   images: {
-    remotePatterns: [...mediaRemotePatterns(), unsplashPattern],
+    remotePatterns: [...mediaRemotePatterns(), unsplashPattern, cloudinaryPattern],
   },
   /**
    * Dev (webpack) on Windows: polling avoids flaky watchers on Desktop/OneDrive/AV-scanned trees

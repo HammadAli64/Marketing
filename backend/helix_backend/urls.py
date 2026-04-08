@@ -14,10 +14,12 @@ urlpatterns = [
     path("api/cms/", include("cms.urls")),
 ]
 
-if settings.DEBUG:
+_use_cloudinary = getattr(settings, "USE_CLOUDINARY_MEDIA", False)
+
+if settings.DEBUG and not _use_cloudinary:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-else:
-    # User uploads (CMS images, etc.) — add a Railway volume on MEDIA_ROOT for persistence.
+elif not _use_cloudinary:
+    # Local / disk media in production — use a Railway volume on MEDIA_ROOT for persistence.
     urlpatterns += [
         re_path(
             r"^media/(?P<path>.*)$",
@@ -25,3 +27,4 @@ else:
             {"document_root": settings.MEDIA_ROOT},
         ),
     ]
+# Cloudinary: ImageField.url is a full https://res.cloudinary.com/... URL; no /media/ route needed.

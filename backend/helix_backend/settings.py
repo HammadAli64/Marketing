@@ -161,11 +161,28 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
+
+def _use_cloudinary_media() -> bool:
+    """When True, CMS ImageFields use Cloudinary (credentials from env)."""
+    if os.environ.get("CLOUDINARY_URL", "").strip():
+        return True
+    return all(
+        os.environ.get(k, "").strip()
+        for k in ("CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET")
+    )
+
+
+USE_CLOUDINARY_MEDIA = _use_cloudinary_media()
+
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": (
+            "cloudinary_storage.storage.MediaCloudinaryStorage"
+            if USE_CLOUDINARY_MEDIA
+            else "django.core.files.storage.FileSystemStorage"
+        ),
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
@@ -176,6 +193,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/media/"
 _media_root_env = os.environ.get("DJANGO_MEDIA_ROOT", "").strip()
 MEDIA_ROOT = Path(_media_root_env) if _media_root_env else (BASE_DIR / "media")
+
+# django-cloudinary-storage reads this when the MediaCloudinaryStorage backend loads.
+# Credentials come from CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME / _API_KEY / _API_SECRET.
+if USE_CLOUDINARY_MEDIA:
+    CLOUDINARY_STORAGE = {
+        "SECURE": True,
+    }
 
 # Public origin of this API (no path, no trailing slash), e.g. https://your-api.up.railway.app
 # Used for absolute /media/... URLs in JSON. Set when server-side CMS fetches use a private
