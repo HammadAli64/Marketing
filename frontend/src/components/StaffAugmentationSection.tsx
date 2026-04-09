@@ -86,6 +86,49 @@ export function StaffAugmentationSection() {
               <p className="mt-4 text-lg font-semibold leading-relaxed text-slate-800 dark:text-slate-200">
                 No long onboarding. No bloated overhead. Just pure firepower.
               </p>
+              <div className="mt-10 rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-white/[0.1] dark:bg-[#0d1528]/90 sm:p-7">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+                  What you get on day one
+                </p>
+                <ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  <li className="flex gap-2">
+                    <span className="mt-0.5 text-brand" aria-hidden>
+                      ✓
+                    </span>
+                    <span>
+                      Senior practitioners who communicate in plain English, own outcomes, and
+                      plug into your tools—not a black-box agency layer.
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="mt-0.5 text-brand" aria-hidden>
+                      ✓
+                    </span>
+                    <span>
+                      Clear working agreements: cadence, escalation path, and how we report
+                      progress to your leads.
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="mt-0.5 text-brand" aria-hidden>
+                      ✓
+                    </span>
+                    <span>
+                      Flex to surge for launches, then right-size when the spike cools—no
+                      long-term bench you pay to warm the bench.
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="mt-0.5 text-brand" aria-hidden>
+                      ✓
+                    </span>
+                    <span>
+                      US-market polish on messaging, accessibility basics, and production
+                      discipline your stakeholders can trust.
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </Reveal>
           </div>
 

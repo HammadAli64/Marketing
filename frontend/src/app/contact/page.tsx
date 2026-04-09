@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
 import { Reveal } from "@/components/Reveal";
-import { COMPANY, publicContactEmails } from "@/lib/constants";
+import {
+  COMPANY,
+  OFFICE_ADDRESS,
+  OFFICE_PHONE,
+  publicContactEmails,
+} from "@/lib/constants";
 import { fetchServicesList } from "@/lib/cms";
 
 export const revalidate = 60;
@@ -58,6 +64,45 @@ export default async function ContactPage() {
                 <li>Ideal timeline and budget range</li>
                 <li>Links or references that clarify the vision</li>
               </ul>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-helix-border dark:bg-helix-surface/70">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                {OFFICE_ADDRESS || OFFICE_PHONE ? "Office & phone" : "Explore first"}
+              </p>
+              {OFFICE_ADDRESS || OFFICE_PHONE ? (
+                <ul className="mt-3 space-y-2 text-base text-slate-600 dark:text-slate-400 sm:text-lg">
+                  {OFFICE_ADDRESS ? (
+                    <li className="whitespace-pre-line leading-relaxed">{OFFICE_ADDRESS}</li>
+                  ) : null}
+                  {OFFICE_PHONE ? (
+                    <li>
+                      <a
+                        href={`tel:${OFFICE_PHONE.replace(/[^\d+]/g, "")}`}
+                        className="font-semibold text-brand hover:text-brand-hover"
+                      >
+                        {OFFICE_PHONE}
+                      </a>
+                    </li>
+                  ) : null}
+                </ul>
+              ) : null}
+              <p
+                className={`text-base leading-relaxed text-slate-600 dark:text-slate-400 sm:text-lg ${OFFICE_ADDRESS || OFFICE_PHONE ? "mt-4 border-t border-slate-200 pt-4 dark:border-white/10" : "mt-3"}`}
+              >
+                See{" "}
+                <Link href="/services" className="font-semibold text-brand hover:text-brand-hover">
+                  services
+                </Link>
+                ,{" "}
+                <Link href="/portfolio" className="font-semibold text-brand hover:text-brand-hover">
+                  portfolio
+                </Link>
+                , and{" "}
+                <Link href="/about" className="font-semibold text-brand hover:text-brand-hover">
+                  about
+                </Link>{" "}
+                for context—then tell us what you want to ship next.
+              </p>
             </div>
           </Reveal>
         </div>

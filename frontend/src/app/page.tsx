@@ -10,7 +10,13 @@ import { Reveal } from "@/components/Reveal";
 import { StaffAugmentationSection } from "@/components/StaffAugmentationSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { WhyChooseSection } from "@/components/WhyChooseSection";
-import { COMPANY, publicContactEmails, SERVICE_SLUG_ORDER } from "@/lib/constants";
+import {
+  COMPANY,
+  OFFICE_ADDRESS,
+  OFFICE_PHONE,
+  publicContactEmails,
+  SERVICE_SLUG_ORDER,
+} from "@/lib/constants";
 import {
   fetchBlogsList,
   fetchHomePayload,
@@ -365,9 +371,47 @@ export default async function HomePage() {
                   <li>We agree on scope, cadence, and success metrics before any heavy lift.</li>
                 </ol>
               </div>
-              <p className="text-base leading-relaxed text-slate-500 dark:text-slate-500">
-                {COMPANY}
-              </p>
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-helix-border dark:bg-helix-elevated sm:p-8">
+                <p className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  {OFFICE_ADDRESS || OFFICE_PHONE ? "Reach us directly" : "More ways to explore"}
+                </p>
+                {OFFICE_ADDRESS || OFFICE_PHONE ? (
+                  <ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                    {OFFICE_ADDRESS ? (
+                      <li className="whitespace-pre-line">{OFFICE_ADDRESS}</li>
+                    ) : null}
+                    {OFFICE_PHONE ? (
+                      <li>
+                        <a
+                          href={`tel:${OFFICE_PHONE.replace(/[^\d+]/g, "")}`}
+                          className="font-semibold text-brand hover:text-brand-hover"
+                        >
+                          {OFFICE_PHONE}
+                        </a>
+                      </li>
+                    ) : null}
+                  </ul>
+                ) : null}
+                <ul
+                  className={`space-y-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400 ${OFFICE_ADDRESS || OFFICE_PHONE ? "mt-6 border-t border-slate-100 pt-6 dark:border-white/10" : "mt-4"}`}
+                >
+                  <li>
+                    Browse{" "}
+                    <Link href="/services" className="font-medium text-brand hover:text-brand-hover">
+                      services
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/portfolio" className="font-medium text-brand hover:text-brand-hover">
+                      portfolio
+                    </Link>{" "}
+                    before you write—context helps us respond with a sharper plan.
+                  </li>
+                  <li>
+                    Mention stack, timeline, and budget range in the form so we can route you
+                    to the right lead without extra back-and-forth.
+                  </li>
+                </ul>
+              </div>
             </Reveal>
 
             <Reveal delay={0.1}>
