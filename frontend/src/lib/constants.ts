@@ -1,5 +1,11 @@
 export const COMPANY = "Helix Prime Solutions";
 
+/** Footer / contact — set in env (supports \n for multi-line address). */
+export const OFFICE_ADDRESS =
+  process.env.NEXT_PUBLIC_OFFICE_ADDRESS?.trim().replace(/\\n/g, "\n") || "";
+
+export const OFFICE_PHONE = process.env.NEXT_PUBLIC_OFFICE_PHONE?.trim() || "";
+
 export const CONTACT_EMAIL =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@helixprimesolutions.com";
 

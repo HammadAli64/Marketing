@@ -183,8 +183,9 @@ export function ImpactStatsSection({ stats }: Props) {
                 Numbers That Actually Matter
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-                Snapshot metrics we stand behind—renewal rates, response standards, and delivery
-                discipline you can hold us to.
+                We don&apos;t do average. Every project is engineered for explosive ROI. Businesses
+                partner with us because we deliver the unfair advantage they need to crush
+                competitors and scale faster than ever.
               </p>
             </div>
           </div>

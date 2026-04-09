@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { COMPANY, publicContactEmails } from "@/lib/constants";
+import {
+  COMPANY,
+  OFFICE_ADDRESS,
+  OFFICE_PHONE,
+  publicContactEmails,
+} from "@/lib/constants";
 import type { FooterSocialLink, SocialPlatform } from "@/lib/footerSocial";
 
 function SocialIcon({ id, paintKey }: { id: SocialPlatform; paintKey: number }) {
@@ -153,7 +158,20 @@ export function Footer({ socialLinks }: FooterProps) {
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
             Contact
           </p>
-          <ul className="mt-4 space-y-2 text-sm text-slate-300">
+          <ul className="mt-4 space-y-3 text-sm text-slate-300">
+            {OFFICE_ADDRESS ? (
+              <li className="leading-relaxed text-slate-400">{OFFICE_ADDRESS}</li>
+            ) : null}
+            {OFFICE_PHONE ? (
+              <li>
+                <a
+                  href={`tel:${OFFICE_PHONE.replace(/[^\d+]/g, "")}`}
+                  className="transition hover:text-brand"
+                >
+                  {OFFICE_PHONE}
+                </a>
+              </li>
+            ) : null}
             {publicContactEmails().map((email) => (
               <li key={email}>
                 <a href={`mailto:${email}`} className="transition hover:text-brand">

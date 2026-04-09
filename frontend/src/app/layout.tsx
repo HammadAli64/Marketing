@@ -33,24 +33,41 @@ const syne = Syne({
   display: "swap",
 });
 
+const defaultTitle = `${COMPANY} | Dominate Your Market. Explode Your Revenue.`;
+const defaultDescription =
+  "Helix Prime Solutions builds conversion-obsessed websites, dominates SEO, ships profit-driving apps, and provides elite staff augmentation—engineered for US businesses that want measurable revenue growth.";
+
 export const metadata: Metadata = {
   metadataBase: metadataBaseUrl(),
   title: {
-    default: `${COMPANY} | Dominate Your Market. Explode Your Revenue.`,
+    default: defaultTitle,
     template: `%s | ${COMPANY}`,
   },
-  description:
-    "Helix Prime Solutions builds conversion-obsessed websites, dominates SEO, ships profit-driving apps, and provides elite staff augmentation—engineered for US businesses that want measurable revenue growth.",
+  description: defaultDescription,
   icons: {
-    icon: [{ url: "/logo.svg", type: "image/svg+xml", sizes: "any" }],
-    apple: [{ url: "/logo.svg", type: "image/svg+xml" }],
-    shortcut: "/logo.svg",
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    apple: [{ url: "/logo.png", type: "image/png" }],
   },
   openGraph: {
     type: "website",
     locale: "en_US",
     siteName: COMPANY,
-    images: [{ url: "/logo.svg", width: 512, height: 512, alt: COMPANY }],
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [
+      {
+        url: "/logo.png",
+        width: 687,
+        height: 1024,
+        alt: COMPANY,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/logo.png"],
   },
   robots: { index: true, follow: true },
 };
