@@ -342,6 +342,12 @@ CONTACT_RECIPIENT_EMAIL = (
     or "info@helixprimesolutions.com"
 )
 
+# Marketing site URL for links in transactional emails (no trailing slash).
+PUBLIC_SITE_URL = (
+    os.environ.get("PUBLIC_SITE_URL", "").strip().rstrip("/")
+    or "https://helixprimesolutions.com"
+)
+
 # Resend (HTTP API) — preferred on Railway when SMTP egress is unreliable.
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
 # Must be a verified sender/domain in Resend dashboard, e.g. "Helix <no-reply@yourdomain.com>"

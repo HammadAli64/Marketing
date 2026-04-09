@@ -5,11 +5,12 @@ import urllib.error
 import urllib.request
 
 from django.conf import settings
-from django.core.mail import EmailMessage, send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from .email_templates import build_team_notification, build_visitor_confirmation
 from .models import Inquiry
 
 logger = logging.getLogger(__name__)
@@ -29,6 +30,7 @@ def _send_resend_email(
     to_email: str,
     subject: str,
     text_body: str,
+    html_body: str | None = None,
     reply_to: str | None = None,
 ) -> None:
     payload: dict[str, object] = {
@@ -37,6 +39,8 @@ def _send_resend_email(
         "subject": subject,
         "text": text_body,
     }
+    if html_body:
+        payload["html"] = html_body
     if reply_to:
         payload["reply_to"] = reply_to
 
@@ -70,32 +74,24 @@ def _send_resend_email(
 def _send_confirmation_email(inquiry: Inquiry) -> None:
     """Best-effort confirmation email to the visitor."""
     try:
-        confirm_subject = "We received your message — Helix Prime Solutions"
-        confirm_body = (
-            f"Hi {inquiry.name},\n\n"
-            "Thank you for contacting Helix Prime Solutions. "
-            "We have received your inquiry and will get back to you shortly.\n\n"
-            "A copy of your message is below for your records.\n\n"
-            "—\n"
-            f"{inquiry.message}\n"
-            "—\n\n"
-            "Best regards,\n"
-            "Helix Prime Solutions\n"
-        )
+        confirm_text, confirm_html = build_visitor_confirmation(inquiry)
+        confirm_subject = "Thanks for reaching out — Helix Prime Solutions"
         if _resend_is_configured():
             _send_resend_email(
                 to_email=inquiry.email,
                 subject=confirm_subject,
-                text_body=confirm_body,
+                text_body=confirm_text,
+                html_body=confirm_html,
             )
         else:
-            send_mail(
-                confirm_subject,
-                confirm_body,
-                settings.DEFAULT_FROM_EMAIL,
-                [inquiry.email],
-                fail_silently=False,
+            msg = EmailMultiAlternatives(
+                subject=confirm_subject,
+                body=confirm_text,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[inquiry.email],
             )
+            msg.attach_alternative(confirm_html, "text/html")
+            msg.send(fail_silently=False)
     except Exception:
         logger.exception(
             "Confirmation email failed for inquiry id=%s", inquiry.id
@@ -165,32 +161,27 @@ def contact_submit(request):
             status=503,
         )
 
-    subject = f"[Helix Prime] Inquiry from {name}"
-    body = (
-        f"Name: {inquiry.name}\n"
-        f"Email: {inquiry.email}\n"
-        f"Company: {inquiry.company or '—'}\n"
-        f"Phone: {inquiry.phone or '—'}\n"
-        f"Service interest: {inquiry.service or '—'}\n\n"
-        f"Message:\n{inquiry.message}\n"
-    )
+    subject = f"[Helix Prime] New inquiry from {name}"
+    team_text, team_html = build_team_notification(inquiry)
     try:
         # Send team email in-request for reliability.
         if has_resend:
             _send_resend_email(
                 to_email=recipient,
                 subject=subject,
-                text_body=body,
+                text_body=team_text,
+                html_body=team_html,
                 reply_to=inquiry.email,
             )
         else:
-            internal = EmailMessage(
+            internal = EmailMultiAlternatives(
                 subject=subject,
-                body=body,
+                body=team_text,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=[recipient],
                 reply_to=[inquiry.email],
             )
+            internal.attach_alternative(team_html, "text/html")
             internal.send(fail_silently=False)
     except Exception:
         logger.exception("Team inquiry email failed for inquiry id=%s", inquiry.id)
